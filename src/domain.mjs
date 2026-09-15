@@ -70,6 +70,63 @@ export function nextAvailableOccurrences(data, startOccurrence, count) {
   return results;
 }
 
+function weekdayForDateKey(dateKey) { return parseDateKey(dateKey).getDay(); }
+
+export function relocateSeriesOccurrence(data, seriesId, oldKey, changes) {
+  const series = data.lessonSeries.find((item) => item.id === seriesId);
+  const current = series?.occurrences.find((item) => item.key === oldKey);
+  if (!series || !current) throw new Error('Deze les kon niet worden gevonden.');
+
+  const startPeriod = Number(changes.startPeriod);
+  const endPeriod = Number(changes.endPeriod);
+  const matchingSlot = data.gymScheduleSlots.find((slot) => slot.classId === series.classId
+    && slot.weekday === weekdayForDateKey(changes.date)
+    && slot.startPeriod === startPeriod
+    && slot.endPeriod === endPeriod);
+  const moveId = current.moveId || `moved-${seriesId}-${oldKey.replace(/[^a-z0-9]/gi, '-')}`;
+  const slotId = matchingSlot?.id || moveId;
+  const nextKey = occurrenceKey(changes.date, slotId);
+  const occupied = data.lessonSeries.some((item) => item.occurrences.some((entry) => entry.key === nextKey && entry.key !== oldKey));
+  if (occupied) throw new Error('Op dit moment is al een andere rubricles gepland.');
+
+  const replacement = { ...current, key: nextKey, date: changes.date, slotId, moveId, startPeriod, endPeriod };
+  const lessonSeries = data.lessonSeries.map((item) => {
+    if (item.id !== seriesId) return item;
+    const occurrences = item.occurrences.map((entry) => entry.key === oldKey ? replacement : entry)
+      .sort((a, b) => a.date.localeCompare(b.date) || a.startPeriod - b.startPeriod);
+    return { ...item, occurrences, assessmentOccurrenceKey: item.assessmentOccurrenceKey === oldKey ? nextKey : item.assessmentOccurrenceKey };
+  });
+  return {
+    ...data,
+    lessonSeries,
+    lessonSessions: data.lessonSessions.map((item) => item.occurrenceKey === oldKey ? { ...item, occurrenceKey: nextKey } : item),
+    assessments: data.assessments.map((item) => item.occurrenceKey === oldKey ? { ...item, occurrenceKey: nextKey } : item),
+    agendaExceptions: data.agendaExceptions.map((item) => item.occurrenceKey === oldKey ? { ...item, occurrenceKey: nextKey } : item),
+  };
+}
+
+export function removeSeriesOccurrence(data, seriesId, key) {
+  const series = data.lessonSeries.find((item) => item.id === seriesId);
+  if (!series?.occurrences.some((item) => item.key === key)) throw new Error('Deze les kon niet worden gevonden.');
+  if (data.assessments.some((item) => item.occurrenceKey === key)) {
+    throw new Error('Een les met leerlingbeoordelingen kan niet worden verwijderd.');
+  }
+  const remaining = series.occurrences.filter((item) => item.key !== key);
+  const lessonSeries = remaining.length
+    ? data.lessonSeries.map((item) => item.id === seriesId ? {
+      ...item,
+      occurrences: remaining,
+      assessmentOccurrenceKey: item.assessmentOccurrenceKey === key ? remaining[remaining.length - 1].key : item.assessmentOccurrenceKey,
+    } : item)
+    : data.lessonSeries.filter((item) => item.id !== seriesId);
+  return {
+    ...data,
+    lessonSeries,
+    lessonSessions: data.lessonSessions.filter((item) => item.occurrenceKey !== key),
+    agendaExceptions: data.agendaExceptions.filter((item) => item.occurrenceKey !== key),
+  };
+}
+
 export function latestAssessmentInRange(assessments, classId, studentId, rubricId, startDate, endDate) {
   return assessments.filter((item) => item.classId === classId && item.studentId === studentId && (item.rubricId || 'kanjam') === rubricId && (!startDate || item.submittedAt.slice(0, 10) >= startDate) && (!endDate || item.submittedAt.slice(0, 10) <= endDate)).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))[0] || null;
 }
