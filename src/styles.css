@@ -94,14 +94,15 @@ tbody tr:hover { background: #fafcfd; }
 .matrix-row h2 { margin-bottom: 6px; font-size: 18px; }
 .matrix-row header p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .matrix-levels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.matrix-level { min-width: 0; border-right: 1px solid #dbe2e7; border-top: 34px solid var(--level-color); padding: 12px; }
+.matrix-level { min-width: 0; border-right: 1px solid #dbe2e7; padding: 0 12px 12px; }
 .matrix-level:last-child { border-right: 0; }
-.matrix-level strong { display: block; margin-bottom: 7px; font-size: 14px; }
+.matrix-level strong { display: block; margin: 0 -12px 9px; padding: 8px 12px; background: var(--level-color); color: #fff; font-size: 14px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .matrix-level p { margin: 0; color: #4b6274; font-size: 13px; line-height: 1.42; }
 .rubric-matrix.compact { gap: 11px; }
 .rubric-matrix.compact .matrix-row { grid-template-columns: 145px minmax(0, 1fr); }
 .rubric-matrix.compact .matrix-row > header { padding: 12px; }
-.rubric-matrix.compact .matrix-level { border-top-width: 25px; padding: 9px; }
+.rubric-matrix.compact .matrix-level { padding: 0 9px 9px; }
+.rubric-matrix.compact .matrix-level strong { margin-inline: -9px; padding: 5px 9px; }
 .rubric-matrix.compact .matrix-level p { font-size: 12px; line-height: 1.3; }
 .media-placeholders { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
 .media-placeholders > div { min-height: 120px; display: grid; place-items: center; align-content: center; gap: 5px; border: 1px dashed #aab9c4; background: #f8fafb; color: #456278; text-align: center; }
@@ -244,10 +245,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .assessment-rubric > header h2 { margin-bottom: 4px; font-size: 25px; }
 .assessment-rubric > header span { color: var(--muted); font-size: 14px; }
 .level-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
-.level-option { position: relative; min-height: 176px; border: 1px solid #c4d0d8; border-top: 46px solid var(--level-color); border-radius: 0; background: #fff; color: #1a374d; padding: 13px 14px 15px; text-align: left; }
+.level-option { position: relative; min-height: 176px; border: 1px solid #c4d0d8; border-radius: 0; background: #fff; color: #1a374d; padding: 0 14px 15px; text-align: left; }
 .level-option.selected { outline: 3px solid var(--level-color); outline-offset: 1px; }
-.level-option svg { position: absolute; top: -34px; right: 11px; color: #fff; }
-.level-name { display: block; font-weight: 800; margin-bottom: 9px; }
+.level-option svg { position: absolute; top: 13px; right: 11px; color: #fff; }
+.level-name { display: block; margin: 0 -14px 10px; padding: 12px 14px; background: var(--level-color); color: #fff; font-weight: 800; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .level-summary { color: #526878; font-size: 13px; line-height: 1.42; }
 .level-detail { min-height: 118px; display: grid; grid-template-columns: 7px 1fr; gap: 15px; margin-top: 16px; border: 1px solid #c9d4dc; background: #fff; padding: 16px; }
 .level-detail > div { background: var(--level-color); }
@@ -263,7 +264,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
   .agenda-item { grid-template-columns: 70px 1fr; }
   .agenda-actions { grid-column: 2; justify-content: flex-start; }
   .matrix-row { grid-template-columns: 145px minmax(0, 1fr); }
-  .matrix-level { padding: 9px; }
+  .matrix-level { padding: 0 9px 9px; }
+  .matrix-level strong { margin-inline: -9px; }
   .matrix-level p { font-size: 12px; }
   .assessment-home-grid { grid-template-columns: minmax(0, 1fr) 285px; }
 }
