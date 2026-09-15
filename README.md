@@ -1,6 +1,6 @@
 # Rubrics LO
 
-Lokale pilot voor formatief handelen in het bewegingsonderwijs. De eerste rubric gaat over KanJam en gebruikt uitsluitend de kleuren Groen, Blauw, Rood, Paars en Zwart.
+Een lokale pilot voor formatief handelen in het bewegingsonderwijs. De app bevat een rubricbibliotheek, een weekagenda met terugkerende gymmomenten, lessenreeksen, leerlingzelfbeoordeling en perioderapporten.
 
 ## Lokaal starten
 
@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-De pilot bewaart gegevens alleen in de lokale opslag van de browser. De aanwezige leerlingen zijn fictieve demonstratiegegevens. Supabase en een directe Magister-koppeling vallen bewust buiten deze eerste versie.
+De pilot bewaart gegevens in de lokale opslag van de browser. Alle meegeleverde namen zijn fictief. Supabase en login worden pas toegevoegd wanneer de testflow inhoudelijk is vastgesteld.
 
 ## Controle
 
