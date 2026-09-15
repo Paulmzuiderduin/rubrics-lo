@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rubricsvo.paulzuiderduin.com/sitemap.xml

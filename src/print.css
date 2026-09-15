@@ -1,0 +1,24 @@
+.print-rubric-matrix { display: none; }
+@media print {
+  body:has(.print-rubric-matrix.ready) .app-shell { display: none !important; }
+  .print-rubric-matrix.ready { display: block; color: #142c40; font-size: 10pt; }
+  .print-rubric-matrix > header { display: flex; justify-content: space-between; align-items: end; padding-bottom: 5mm; border-bottom: 1.5pt solid #142c40; }
+  .print-rubric-matrix > header p { margin: 0 0 1.5mm; color: #596f80; }
+  .print-rubric-matrix > header h1 { margin: 0; font-size: 20pt; }
+  .print-rubric-matrix > header > div:last-child { display: grid; gap: 1mm; text-align: right; }
+  .print-rubric-matrix > header span { color: #596f80; }
+  .print-current { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 4mm; }
+  .print-current section { border: .75pt solid #b9c6cf; padding: 3mm; }
+  .print-current section > div { display: flex; justify-content: space-between; padding-bottom: 2mm; margin-bottom: 2mm; border-bottom: .75pt solid #d6dfe5; }
+  .print-current p { margin: 1mm 0; line-height: 1.3; }
+  .print-rubrics { margin-top: 5mm; display: grid; gap: 4mm; }
+  .print-rubrics > section { break-inside: avoid; }
+  .print-row-title { display: flex; align-items: baseline; gap: 3mm; margin-bottom: 1.5mm; }
+  .print-row-title strong { font-size: 12pt; }
+  .print-row-title span { color: #596f80; }
+  .print-levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2mm; }
+  .print-levels > div { min-height: 33mm; border: .75pt solid #c4cfd6; }
+  .print-levels > div.current { outline: 1.5pt solid #142c40; outline-offset: 1pt; }
+  .print-levels span { display: block; padding: 2mm 2.5mm; color: #fff; font-weight: 700; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .print-levels p { margin: 0; padding: 2.5mm; line-height: 1.3; }
+}
