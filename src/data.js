@@ -1,7 +1,7 @@
 export const CLASS_CLUSTERS = [
-  { key: '1-2', name: 'Klas 1 en 2' },
-  { key: '3-4', name: 'Klas 3 en 4' },
-  { key: '5-6', name: 'Klas 5 en 6' },
+  { key: '1-2', name: 'Onderbouw' },
+  { key: '3-4', name: 'Middenbouw' },
+  { key: '5-6', name: 'Bovenbouw' },
 ];
 
 export const LEVELS = [

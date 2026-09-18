@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { CLASS_CLUSTERS } from '../src/data.js';
 import { migrateV1 } from '../src/storage.mjs';
+
+test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wijzigen', () => {
+  assert.deepEqual(CLASS_CLUSTERS, [
+    { key: '1-2', name: 'Onderbouw' },
+    { key: '3-4', name: 'Middenbouw' },
+    { key: '5-6', name: 'Bovenbouw' },
+  ]);
+});
 
 test('v1-data migreert zonder klassen, leerlingen of beoordelingen te verliezen', () => {
   const old = { classes: [{ id: 'c1', name: 'Testklas', students: [{ id: 's1', name: 'Test Leerling' }], lessons: [{ id: 'l1', activity: 'KanJam', together: true, date: '2026-09-01T09:00:00Z' }] }], assessments: [{ id: 'a1', classId: 'c1', studentId: 's1', lessonId: 'l1', submittedAt: '2026-09-01T09:30:00Z', self: { movement: 'blue' }, effective: { movement: 'blue' }, adjusted: {} }] };

@@ -42,6 +42,8 @@ E-mail/wachtwoordregistratie en e-mailbevestiging staan aan. Stel in Supabase on
 
 Supabase ondersteunt 2FA/MFA met onder andere TOTP-authenticatorapps. De huidige pilot is daarop voorbereid via Supabase Auth, maar toont nog geen inschrijf- en herstelinterface voor een tweede factor. Voeg MFA pas toe samen met een herstelprocedure en afdwinging op `aal2` in RLS.
 
+Geplande botbescherming: Cloudflare Turnstile voor inloggen, registreren en wachtwoordherstel. Activeer **Enable CAPTCHA protection** in Supabase pas nadat de Turnstile-widget en `captchaToken` in alle drie frontendflows zijn toegevoegd en getest.
+
 ## Publicatie
 
 GitHub Pages leest tijdens de build deze repositoryvariabelen:

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpenCheck, KeyRound, LockKeyhole, Mail, ShieldCheck } from 'lucide-react';
+import { BookOpenCheck, ClipboardCheck, GraduationCap, KeyRound, LockKeyhole, Mail, ShieldCheck, Target } from 'lucide-react';
 import App from './App.jsx';
 import { isSupabaseConfigured, supabase } from './supabase.js';
 
@@ -47,7 +47,54 @@ function AuthForm() {
   }
 
   const title = mode === 'signup' ? 'Docentenaccount maken' : mode === 'forgot' ? 'Wachtwoord herstellen' : 'Inloggen';
-  return <main className="auth-page"><section className="auth-card"><div className="auth-brand"><BookOpenCheck size={24} /><span>Rubrics LO</span></div><p className="eyebrow">Beveiligde docentenomgeving</p><h1>{title}</h1><p>{mode === 'forgot' ? 'Je ontvangt een beveiligde link per e-mail.' : 'Leerlinggegevens zijn alleen zichtbaar binnen jouw eigen account.'}</p><form onSubmit={submit}><label className="field"><span>E-mailadres</span><div className="auth-input"><Mail size={17} /><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required autoFocus /></div></label>{mode !== 'forgot' && <label className="field"><span>Wachtwoord</span><div className="auth-input"><LockKeyhole size={17} /><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} minLength={mode === 'signup' ? 12 : undefined} required /></div>{mode === 'signup' && <small>Minimaal 12 tekens; gebruik bij voorkeur een wachtwoordmanager.</small>}</label>}{mode === 'signup' && <label className="field"><span>Wachtwoord herhalen</span><div className="auth-input"><KeyRound size={17} /><input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" minLength="12" required /></div></label>}{error && <p className="auth-message error" role="alert">{error}</p>}{notice && <p className="auth-message success" role="status">{notice}</p>}<button className="primary-button auth-submit" disabled={busy}>{busy ? 'Even wachten…' : mode === 'signup' ? 'Account maken' : mode === 'forgot' ? 'Herstellink versturen' : 'Inloggen'}</button></form><div className="auth-links">{mode === 'signin' && <><button onClick={() => switchMode('forgot')}>Wachtwoord vergeten?</button><button onClick={() => switchMode('signup')}>Nieuw account maken</button></>}{mode !== 'signin' && <button onClick={() => switchMode('signin')}>Terug naar inloggen</button>}</div><div className="auth-security"><ShieldCheck size={18} /><span>De database gebruikt Row Level Security: ieder account kan alleen de eigen werkomgeving lezen en wijzigen.</span></div></section></main>;
+  return (
+    <main className="auth-page auth-public-page">
+      <div className="auth-public-shell">
+        <section className="auth-intro" aria-labelledby="product-title">
+          <div className="auth-brand"><BookOpenCheck size={25} /><span>Rubrics LO</span></div>
+          <div className="auth-intro-copy">
+            <p className="eyebrow">Formatief handelen in het bewegingsonderwijs</p>
+            <h1 id="product-title">Rubrics die ontwikkeling zichtbaar maken</h1>
+            <p className="auth-lead">Een digitale werkomgeving voor docenten lichamelijke opvoeding in het voortgezet onderwijs. Plan lessenreeksen, werk met herkenbare rubrics en geef leerlingen zicht op hun volgende uitdaging.</p>
+          </div>
+          <div className="auth-feature-list" aria-label="Belangrijkste functies">
+            <article>
+              <span><Target size={20} /></span>
+              <div><h2>Formatief handelen</h2><p>Leerlingen schatten zichzelf in, de docent bespreekt de ontwikkeling en maakt de volgende stap concreet.</p></div>
+            </article>
+            <article>
+              <span><ClipboardCheck size={20} /></span>
+              <div><h2>Rubrics specifiek voor het VO</h2><p>Vijf duidelijke kleurniveaus voor lessen, zelfbeoordeling en overzichtelijke voortgangsrapporten.</p></div>
+            </article>
+            <article>
+              <span><GraduationCap size={20} /></span>
+              <div><h2>Gebaseerd op de onderwijsvisie van de HAN</h2><p>De opbouw sluit aan bij de uitgangspunten voor rubrics en formatief handelen binnen de HAN ALO.</p></div>
+            </article>
+          </div>
+          <footer className="auth-contact">
+            <span>Vraag, idee of interesse?</span>
+            <a href="mailto:info@paulzuiderduin.com"><Mail size={17} />info@paulzuiderduin.com</a>
+          </footer>
+        </section>
+
+        <section className="auth-card" aria-labelledby="auth-title">
+          <p className="eyebrow">Beveiligde docentenomgeving</p>
+          <h2 id="auth-title">{title}</h2>
+          <p>{mode === 'forgot' ? 'Je ontvangt een beveiligde link per e-mail.' : 'Leerlinggegevens zijn alleen zichtbaar binnen jouw eigen account.'}</p>
+          <form onSubmit={submit}>
+            <label className="field"><span>E-mailadres</span><div className="auth-input"><Mail size={17} /><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required autoFocus /></div></label>
+            {mode !== 'forgot' && <label className="field"><span>Wachtwoord</span><div className="auth-input"><LockKeyhole size={17} /><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} minLength={mode === 'signup' ? 12 : undefined} required /></div>{mode === 'signup' && <small>Minimaal 12 tekens; gebruik bij voorkeur een wachtwoordmanager.</small>}</label>}
+            {mode === 'signup' && <label className="field"><span>Wachtwoord herhalen</span><div className="auth-input"><KeyRound size={17} /><input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" minLength="12" required /></div></label>}
+            {error && <p className="auth-message error" role="alert">{error}</p>}
+            {notice && <p className="auth-message success" role="status">{notice}</p>}
+            <button className="primary-button auth-submit" disabled={busy}>{busy ? 'Even wachten…' : mode === 'signup' ? 'Account maken' : mode === 'forgot' ? 'Herstellink versturen' : 'Inloggen'}</button>
+          </form>
+          <div className="auth-links">{mode === 'signin' && <><button onClick={() => switchMode('forgot')}>Wachtwoord vergeten?</button><button onClick={() => switchMode('signup')}>Nieuw account maken</button></>}{mode !== 'signin' && <button onClick={() => switchMode('signin')}>Terug naar inloggen</button>}</div>
+          <div className="auth-security"><ShieldCheck size={18} /><span>De database gebruikt Row Level Security: ieder account kan alleen de eigen werkomgeving lezen en wijzigen.</span></div>
+        </section>
+      </div>
+    </main>
+  );
 }
 
 function PasswordRecovery({ onDone }) {
