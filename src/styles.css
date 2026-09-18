@@ -47,10 +47,8 @@ tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: #fafcfd; }
 .action-cell { text-align: right; }
 .empty-value { color: #6d8191; font-size: 13px; }
-.color-tag { --level-color: #506070; min-width: 100px; display: inline-flex; align-items: center; gap: 8px; color: #183147; font-weight: 700; }
-.color-tag::before { content: ''; width: 32px; height: 24px; background: var(--level-color); border: 1px solid rgba(0, 0, 0, .14); }
-.color-tag.small { min-width: 86px; font-size: 13px; }
-.color-tag.small::before { width: 26px; height: 18px; }
+.color-tag { --level-color: #506070; min-width: 100px; display: inline-flex; align-items: center; justify-content: center; padding: 7px 12px; border: 1px solid rgba(0, 0, 0, .14); background: var(--level-color); color: #fff; font-weight: 700; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.color-tag.small { min-width: 86px; padding: 5px 10px; font-size: 13px; }
 .tabs { display: flex; gap: 30px; border-bottom: 1px solid #cbd6de; margin: -8px 0 30px; overflow-x: auto; }
 .tabs button { padding: 12px 1px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #5d7385; white-space: nowrap; }
 .tabs button.active { border-bottom-color: var(--blue); color: #17344d; font-weight: 750; }
