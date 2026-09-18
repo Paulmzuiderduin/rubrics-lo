@@ -11,3 +11,25 @@ test('v1-data migreert zonder klassen, leerlingen of beoordelingen te verliezen'
   assert.equal(result.lessonSeries.length, 1);
   assert.equal(result.lessonSessions[0].mode, 'assessment');
 });
+
+test('lege clouddata vult alleen veilige standaarden aan en geen demo-klassen', async () => {
+  const { hydrateData } = await import('../src/storage.mjs');
+  const result = hydrateData({ version: 2, classes: [] });
+  assert.deepEqual(result.classes, []);
+  assert.equal(result.lessonPeriods.length, 8);
+  assert.deepEqual(result.assessments, []);
+});
+
+test('lokale pilotdata kan na cloudmigratie volledig worden gewist', async () => {
+  const { clearLocalData, hasLocalData, OLD_STORAGE_KEY, STORAGE_KEY } = await import('../src/storage.mjs');
+  const values = new Map([[STORAGE_KEY, '{}'], [OLD_STORAGE_KEY, '{}']]);
+  const storage = { getItem: (key) => values.get(key) || null, removeItem: (key) => values.delete(key) };
+  assert.equal(hasLocalData(storage), true);
+  clearLocalData(storage);
+  assert.equal(hasLocalData(storage), false);
+});
+
+test('bestaande klassen krijgen bij migratie een geldig klascluster', () => {
+  const old = { classes: [{ id: 'c1', name: 'Testklas', students: [], lessons: [] }], assessments: [] };
+  assert.equal(migrateV1(old).classes[0].cluster, '3-4');
+});

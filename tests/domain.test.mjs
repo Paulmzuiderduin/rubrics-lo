@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createInitialData } from '../src/data.js';
-import { dateRangeForFilter, latestAssessmentInRange, nextAvailableOccurrences, occurrencesForWeek, parseDateKey, relocateSeriesOccurrence, removeSeriesOccurrence } from '../src/domain.mjs';
+import { appendLessonSession, dateRangeForFilter, deleteClassData, latestAssessmentInRange, nextAvailableOccurrences, occurrencesForWeek, parseDateKey, relocateSeriesOccurrence, removeSeriesOccurrence } from '../src/domain.mjs';
 
 test('weekagenda bevat meerdere vaste gymmomenten met lesuren', () => {
   const data = createInitialData();
@@ -65,4 +65,37 @@ test('een les met leerlingbeoordelingen wordt niet verwijderd', () => {
     () => removeSeriesOccurrence(data, 'series-demo', '2026-09-15|slot-2a-tue'),
     /leerlingbeoordelingen/,
   );
+});
+
+
+test('een opnieuw gestarte les bewaart de bestaande lesgeschiedenis', () => {
+  const data = createInitialData();
+  const series = data.lessonSeries[0];
+  const occurrence = series.occurrences[0];
+  const result = appendLessonSession(data, series, occurrence, '2026-09-18T10:00:00Z', 'session-herstart');
+  assert.equal(result.data.lessonSessions.length, data.lessonSessions.length + 1);
+  assert.equal(result.data.lessonSessions.some((item) => item.id === 'session-demo-1'), true);
+  assert.equal(result.session.id, 'session-herstart');
+});
+
+test('beoordelingsmoment en Samen bewegen kunnen vanuit de agenda worden gewijzigd', () => {
+  const data = createInitialData();
+  const key = '2026-09-11|slot-2a-fri';
+  const updated = relocateSeriesOccurrence(data, 'series-demo', key, { date: '2026-09-11', startPeriod: 5, endPeriod: 5, lessonType: 'assessment', includeTogether: false });
+  const series = updated.lessonSeries[0];
+  assert.equal(series.assessmentOccurrenceKey, key);
+  assert.equal(series.includeTogether, false);
+});
+
+
+test('een klas verwijderen ruimt gekoppelde persoonsgegevens en planning volledig op', () => {
+  const data = createInitialData();
+  data.agendaExceptions.push({ occurrenceKey: '2026-09-08|slot-2a-tue', status: 'cancelled' });
+  const updated = deleteClassData(data, 'class-2a');
+  assert.equal(updated.classes.some((item) => item.id === 'class-2a'), false);
+  assert.equal(updated.gymScheduleSlots.some((item) => item.classId === 'class-2a'), false);
+  assert.equal(updated.lessonSeries.some((item) => item.classId === 'class-2a'), false);
+  assert.equal(updated.lessonSessions.length, 0);
+  assert.equal(updated.assessments.some((item) => item.classId === 'class-2a'), false);
+  assert.equal(updated.agendaExceptions.length, 0);
 });

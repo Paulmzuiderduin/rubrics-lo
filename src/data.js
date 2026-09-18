@@ -1,3 +1,9 @@
+export const CLASS_CLUSTERS = [
+  { key: '1-2', name: 'Klas 1 en 2' },
+  { key: '3-4', name: 'Klas 3 en 4' },
+  { key: '5-6', name: 'Klas 5 en 6' },
+];
+
 export const LEVELS = [
   { key: 'green', name: 'Groen', color: '#2f7d56' },
   { key: 'blue', name: 'Blauw', color: '#2f6f9f' },
@@ -39,12 +45,12 @@ export const RUBRICS = [{
 export const RUBRIC = RUBRICS[0].criteria;
 
 export const DEMO_CLASSES = [
-  { id: 'class-2a', name: '2A', students: [
+  { id: 'class-2a', name: '2A', cluster: '1-2', students: [
     { id: 's-amine', name: 'Amine El Idrissi' }, { id: 's-bo', name: 'Bo de Wit' },
     { id: 's-isa', name: 'Isa Jansen' }, { id: 's-lina', name: 'Lina Vermeer' },
     { id: 's-noud', name: 'Noud Bakker' },
   ] },
-  { id: 'class-3b', name: '3B', students: [
+  { id: 'class-3b', name: '3B', cluster: '3-4', students: [
     { id: 's-aylin', name: 'Aylin Smit' }, { id: 's-daan', name: 'Daan Mulder' },
     { id: 's-jules', name: 'Jules Vos' }, { id: 's-mila', name: 'Mila Bos' },
   ] },
@@ -92,5 +98,19 @@ export function createInitialData() {
       { id: 'assessment-demo-1', classId: 'class-2a', studentId: 's-amine', rubricId: 'kanjam', seriesId: 'series-demo', occurrenceKey: '2026-09-15|slot-2a-tue', submittedAt: '2026-09-15T08:35:00.000Z', self: { movement: 'red', together: 'blue' }, effective: { movement: 'red', together: 'blue' }, adjusted: {} },
       { id: 'assessment-demo-2', classId: 'class-2a', studentId: 's-bo', rubricId: 'kanjam', seriesId: 'series-demo', occurrenceKey: '2026-09-15|slot-2a-tue', submittedAt: '2026-09-15T08:42:00.000Z', self: { movement: 'blue', together: 'red' }, effective: { movement: 'red', together: 'red' }, adjusted: { movement: true } },
     ],
+  };
+}
+
+export function createEmptyData() {
+  const base = createInitialData();
+  return {
+    ...base,
+    classes: [],
+    gymScheduleSlots: [],
+    lessonSeries: [],
+    lessonSessions: [],
+    agendaExceptions: [],
+    reportPeriods: [],
+    assessments: [],
   };
 }

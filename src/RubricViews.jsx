@@ -23,7 +23,14 @@ export function PresentationMode({ rubric, activeKeys = ['movement', 'together']
 }
 
 function ExitConfirm({ onCancel, onConfirm }) {
-  return <div className="modal-backdrop"><section className="modal"><header><div><h2>Terug naar docentmodus?</h2><p>De leerlingweergave wordt afgesloten.</p></div><button className="icon-button" onClick={onCancel} aria-label="Sluiten"><X size={20} /></button></header><footer className="modal-actions"><button className="secondary-button" onClick={onCancel}>Annuleren</button><button className="primary-button" onClick={onConfirm}>Docentmodus openen</button></footer></section></div>;
+  const [password, setPassword] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
+  async function submit(event) {
+    event.preventDefault(); setBusy(true); setError('');
+    const message = await onConfirm(password);
+    setBusy(false);
+    if (message) setError(message);
+  }
+  return <div className="modal-backdrop"><section className="modal teacher-unlock"><header><div><h2>Terug naar docentmodus</h2><p>Vul het wachtwoord van het docentenaccount in. Zo kunnen leerlingen niet bij resultaten of leerlinggegevens.</p></div><button className="icon-button" onClick={onCancel} aria-label="Sluiten"><X size={20} /></button></header><form onSubmit={submit}><label className="field"><span>Wachtwoord</span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" autoFocus required /></label>{error && <p className="form-error" role="alert">{error}</p>}<footer className="modal-actions"><button type="button" className="secondary-button" onClick={onCancel}>Annuleren</button><button className="primary-button" disabled={busy}>{busy ? 'Controleren…' : 'Docentmodus openen'}</button></footer></form></section></div>;
 }
 
 function LevelPicker({ criterion, value, onChange }) {
