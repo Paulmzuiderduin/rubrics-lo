@@ -17,3 +17,9 @@ test('rubricpresentatie kan Samen bewegen wel of niet meenemen', () => {
   assert.match(appSource, /Leren bewegen \+ Samen bewegen/);
   assert.match(appSource, /Alleen Leren bewegen/);
 });
+
+test('rapporten kunnen per leerling of voor de gehele klas worden afgedrukt', () => {
+  assert.match(appSource, /const \[printScope, setPrintScope\] = useState\('student'\)/);
+  assert.match(appSource, /<option value="class">Gehele klas<\/option>/);
+  assert.match(appSource, /className="class-report-print"/);
+});

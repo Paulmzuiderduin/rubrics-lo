@@ -219,6 +219,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .report-sheet > header h1 { margin: 0; font-size: 30px; }
 .report-sheet > header > div:last-child { display: flex; flex-direction: column; align-items: end; gap: 5px; }
 .report-sheet > header span { color: var(--muted); font-size: 13px; }
+.class-report-print { display: none; }
+.report-sheet-empty { display: grid; place-items: center; align-content: center; min-height: 240px; margin-top: 24px; border: 1px solid #d7e0e6; color: var(--muted); text-align: center; }
+.report-sheet-empty strong { margin-bottom: 7px; color: var(--navy); }
+.report-sheet-empty p { margin: 0; }
 .report-skills { display: grid; gap: 20px; margin-top: 24px; }
 .report-skills section { border: 1px solid #c8d3da; }
 .report-color-head { --level-color: #333; display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; color: #fff; background: var(--level-color); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
@@ -339,6 +343,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
   .main-content { padding: 0; }
   .report-sheet { border: 0; padding: 0; }
   .report-sheet > header { padding-bottom: 8mm; }
+  .report-area.print-class > .report-sheet, .report-area.print-class > .empty-state { display: none !important; }
+  .report-area.print-class > .class-report-print { display: block; }
+  .class-report-print .report-sheet { min-height: 180mm; break-after: page; page-break-after: always; }
+  .class-report-print .report-sheet:last-child { break-after: auto; page-break-after: auto; }
   .report-skills { grid-template-columns: 1fr 1fr; gap: 8mm; margin-top: 8mm; }
   .report-skills section { break-inside: avoid; }
   .report-copy { grid-template-columns: 1fr; }
