@@ -12,10 +12,26 @@ export const LEVELS = [
   { key: 'black', name: 'Zwart', color: '#202a33' },
 ];
 
+// Practical library categories for VO. These combine the familiar activity
+// areas from the upper years with the game themes teachers use when planning
+// lessons. They are separate from the rubric goal domains.
+export const RUBRIC_CATEGORIES = [
+  { key: 'target-games', name: 'Doelspelen', description: 'Basketbal, handbal, voetbal, unihockey en frisbeespelen.' },
+  { key: 'rebound-games', name: 'Terugslagspelen', description: 'Volleybal, badminton, tennis, tafeltennis en varianten.' },
+  { key: 'striking-fielding-games', name: 'Slag- en loopspelen', description: 'Honkbal, softbal, cricket en verwante spelvormen.' },
+  { key: 'tag-dodge-games', name: 'Tik- en afgooispelen', description: 'Tikspelen, afgooispelen en andere vang- en ontwijkspelen.' },
+  { key: 'gymnastics', name: 'Turnen', description: 'Springen, zwaaien, balanceren, acrobatiek en klimmen.' },
+  { key: 'movement-to-music', name: 'Bewegen op muziek', description: 'Ritme, dans en conditionele vormen op muziek.' },
+  { key: 'athletics', name: 'Atletiek', description: 'Hardlopen, ver- en hoogspringen, werpen, stoten en slingeren.' },
+  { key: 'self-defence', name: 'Zelfverdediging', description: 'Stoeispelen en trefspelen met aandacht voor veiligheid.' },
+  { key: 'current-activities', name: 'Actuele bewegingsactiviteiten', description: 'Outdoor-, water-, winter- en andere nieuwe bewegingsactiviteiten.' },
+];
+
 export const RUBRICS = [{
   id: 'kanjam',
   title: 'KanJam',
   form: 'Spel',
+  category: 'target-games',
   description: 'Gericht werpen, tactiek afspreken en samen spelen.',
   criteria: [
     {

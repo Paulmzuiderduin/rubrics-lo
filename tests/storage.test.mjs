@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CLASS_CLUSTERS } from '../src/data.js';
+import { CLASS_CLUSTERS, RUBRIC_CATEGORIES, RUBRICS } from '../src/data.js';
 import { migrateV1 } from '../src/storage.mjs';
 
 test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wijzigen', () => {
@@ -9,6 +9,21 @@ test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wij
     { key: '3-4', name: 'Middenbouw' },
     { key: '5-6', name: 'Bovenbouw' },
   ]);
+});
+
+test('rubricbibliotheek toont het VO-raamwerk en deelt KanJam in bij doelspelen', () => {
+  assert.deepEqual(RUBRIC_CATEGORIES.map((item) => item.name), [
+    'Doelspelen',
+    'Terugslagspelen',
+    'Slag- en loopspelen',
+    'Tik- en afgooispelen',
+    'Turnen',
+    'Bewegen op muziek',
+    'Atletiek',
+    'Zelfverdediging',
+    'Actuele bewegingsactiviteiten',
+  ]);
+  assert.equal(RUBRICS.find((item) => item.id === 'kanjam')?.category, 'target-games');
 });
 
 test('v1-data migreert zonder klassen, leerlingen of beoordelingen te verliezen', () => {
