@@ -14,7 +14,7 @@ export function useWorkspace(user) {
   useEffect(() => {
     let active = true;
     setState((current) => ({ ...current, data: null, phase: 'loading', error: '' }));
-    loadRemoteWorkspace(supabase, user.id)
+    loadRemoteWorkspace(supabase)
       .then((remote) => {
         if (!active) return;
         if (!remote) {
@@ -35,7 +35,7 @@ export function useWorkspace(user) {
     setState((current) => ({ ...current, phase: 'loading', error: '' }));
     try {
       const next = source === 'local' && hasLocalData(localStorage) ? loadData(localStorage) : createEmptyData();
-      const saved = await saveRemoteWorkspace(supabase, user.id, next);
+      const saved = await saveRemoteWorkspace(supabase, next);
       clearLocalData(localStorage);
       dataRef.current = next;
       setState({ data: next, phase: 'ready', sync: 'saved', error: '', updatedAt: saved.updated_at });
@@ -53,7 +53,7 @@ export function useWorkspace(user) {
     setState((previous) => ({ ...previous, data: next, sync: 'saving', error: '' }));
     const task = saveQueue.current
       .catch(() => undefined)
-      .then(() => saveRemoteWorkspace(supabase, user.id, next));
+      .then(() => saveRemoteWorkspace(supabase, next));
     saveQueue.current = task;
     task.then((saved) => {
       if (saveVersion.current === version) setState((previous) => ({ ...previous, sync: 'saved', updatedAt: saved.updated_at, error: '' }));

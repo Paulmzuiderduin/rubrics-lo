@@ -1,15 +1,14 @@
-export const WORKSPACE_TABLE = 'teacher_workspaces';
-export const WORKSPACE_SCHEMA_VERSION = 2;
+export const LOAD_WORKSPACE_RPC = 'load_personal_workspace_snapshot';
+export const SAVE_WORKSPACE_RPC = 'save_personal_workspace_snapshot';
+export const WORKSPACE_SCHEMA_VERSION = 3;
 
 export function workspacePayload(data) {
   return { ...data, version: WORKSPACE_SCHEMA_VERSION };
 }
 
-export async function loadRemoteWorkspace(client, ownerId) {
+export async function loadRemoteWorkspace(client) {
   const { data, error } = await client
-    .from(WORKSPACE_TABLE)
-    .select('data, schema_version, updated_at')
-    .eq('owner_id', ownerId)
+    .rpc(LOAD_WORKSPACE_RPC)
     .maybeSingle();
 
   if (error) throw error;
@@ -21,17 +20,10 @@ export async function loadRemoteWorkspace(client, ownerId) {
   };
 }
 
-export async function saveRemoteWorkspace(client, ownerId, data) {
+export async function saveRemoteWorkspace(client, data) {
   const payload = workspacePayload(data);
   const { data: saved, error } = await client
-    .from(WORKSPACE_TABLE)
-    .upsert({
-      owner_id: ownerId,
-      schema_version: WORKSPACE_SCHEMA_VERSION,
-      data: payload,
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'owner_id' })
-    .select('updated_at')
+    .rpc(SAVE_WORKSPACE_RPC, { payload })
     .single();
 
   if (error) throw error;

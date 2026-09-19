@@ -1,35 +1,30 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { loadRemoteWorkspace, saveRemoteWorkspace, WORKSPACE_TABLE, workspacePayload } from '../src/cloudStorage.mjs';
+import { LOAD_WORKSPACE_RPC, loadRemoteWorkspace, SAVE_WORKSPACE_RPC, saveRemoteWorkspace, workspacePayload } from '../src/cloudStorage.mjs';
 
 test('workspacepayload forceert de ondersteunde schemaversie', () => {
-  assert.deepEqual(workspacePayload({ version: 99, classes: [] }), { version: 2, classes: [] });
+  assert.deepEqual(workspacePayload({ version: 99, classes: [] }), { version: 3, classes: [] });
 });
 
-test('cloudopslag leest uitsluitend de werkomgeving van de opgegeven eigenaar', async () => {
+test('cloudopslag leest de werkomgeving via een servergebonden RPC', async () => {
   const calls = [];
   const chain = {
-    select(value) { calls.push(['select', value]); return this; },
-    eq(column, value) { calls.push(['eq', column, value]); return this; },
-    async maybeSingle() { return { data: { data: { version: 2, classes: [] }, schema_version: 2, updated_at: '2026-09-18T10:00:00Z' }, error: null }; },
+    async maybeSingle() { return { data: { data: { version: 3, classes: [] }, schema_version: 3, updated_at: '2026-09-18T10:00:00Z' }, error: null }; },
   };
-  const client = { from(table) { calls.push(['from', table]); return chain; } };
-  const result = await loadRemoteWorkspace(client, 'teacher-1');
-  assert.equal(calls[0][1], WORKSPACE_TABLE);
-  assert.deepEqual(calls.find((item) => item[0] === 'eq'), ['eq', 'owner_id', 'teacher-1']);
-  assert.equal(result.data.version, 2);
+  const client = { rpc(name, args) { calls.push([name, args]); return chain; } };
+  const result = await loadRemoteWorkspace(client);
+  assert.deepEqual(calls, [[LOAD_WORKSPACE_RPC, undefined]]);
+  assert.equal(result.data.version, 3);
 });
 
-test('cloudopslag zet owner_id altijd uit de ingelogde gebruiker', async () => {
-  let upserted;
+test('cloudopslag stuurt geen manipuleerbare eigenaar naar de server', async () => {
+  let rpcCall;
   const chain = {
-    upsert(value, options) { upserted = value; assert.deepEqual(options, { onConflict: 'owner_id' }); return this; },
-    select() { return this; },
     async single() { return { data: { updated_at: '2026-09-18T10:00:00Z' }, error: null }; },
   };
-  const client = { from(table) { assert.equal(table, WORKSPACE_TABLE); return chain; } };
-  await saveRemoteWorkspace(client, 'teacher-2', { version: 8, classes: [] });
-  assert.equal(upserted.owner_id, 'teacher-2');
-  assert.equal(upserted.schema_version, 2);
-  assert.equal(upserted.data.version, 2);
+  const client = { rpc(name, args) { rpcCall = { name, args }; return chain; } };
+  await saveRemoteWorkspace(client, { version: 8, classes: [] });
+  assert.equal(rpcCall.name, SAVE_WORKSPACE_RPC);
+  assert.deepEqual(Object.keys(rpcCall.args), ['payload']);
+  assert.equal(rpcCall.args.payload.version, 3);
 });

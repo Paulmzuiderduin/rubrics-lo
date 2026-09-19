@@ -19,14 +19,19 @@ Gebruik nooit een Supabase secret key of `service_role` key in deze browserapp.
 
 De gekoppelde productieomgeving is het Supabase-project `Rubrics`. De migraties staan in `supabase/migrations`.
 
-De pilot bewaart per docentenaccount één versieerbare werkomgeving in `public.teacher_workspaces`. Dit houdt iedere opslagactie atomair en beperkt het RLS-aanvalsoppervlak. Voor een latere schoolbrede productversie kan de JSON-werkomgeving achter `src/cloudStorage.mjs` worden genormaliseerd zonder de interface opnieuw te bouwen.
+De pilot gebruikt een relationeel datamodel. Iedere docent krijgt automatisch één persoonlijke `workspace`; klassen, leerlingen, roosters, lessenreeksen, sessies en beoordelingen staan in afzonderlijke tabellen. Rubrics zijn afzonderlijk geversioneerd, zodat een historische beoordeling naar de toen gebruikte inhoud kan blijven verwijzen.
+
+`workspace_members` bevat al rollen voor eigenaar, beheerder, docent en lezer. De huidige interface maakt uitsluitend een persoonlijke werkomgeving met één eigenaar en biedt bewust nog geen deel- of teamfuncties. Later kunnen scholen, teams en gedeeld eigenaarschap daardoor worden toegevoegd zonder de onderwijsgegevens opnieuw te modelleren.
+
+De frontend leest en schrijft de tijdelijke volledige clientweergave via twee afgeschermde RPC's. De eigenaar komt daarbij uitsluitend uit `auth.uid()` en kan niet vanuit de browser worden meegestuurd. De gegevens zelf worden niet als één JSON-document opgeslagen; de RPC vertaalt naar genormaliseerde rijen. Naarmate de productflows stabiliseren kunnen gerichte mutaties per entiteit deze tijdelijke snapshot-API vervangen.
 
 Beveiliging:
 
 - RLS staat aan én wordt geforceerd.
 - `anon` heeft geen tabelrechten.
-- `authenticated` heeft alleen `SELECT`, `INSERT` en `UPDATE`.
-- Alle drie policies vereisen `owner_id = auth.uid()`.
+- `authenticated` krijgt alleen de minimaal benodigde tabel- en RPC-rechten.
+- Alle domeintabellen zijn via `workspace_id` en lidmaatschapspolicies afgeschermd.
+- De persoonlijke workspace-eigenaar wordt server-side bepaald via `auth.uid()`.
 - Anonieme Auth-gebruikers worden expliciet geweigerd.
 - De frontend bevat uitsluitend de openbare publishable key.
 - Lokale leerlingdata wordt na een eenmalige cloudmigratie uit `localStorage` verwijderd. Alleen een persoonsgegevensvrij leerlingmodusslot blijft lokaal staan zolang een les actief is.

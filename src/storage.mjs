@@ -1,6 +1,7 @@
 import { createEmptyData, createInitialData, DEFAULT_PERIODS } from './data.js';
 
-export const STORAGE_KEY = 'rubrics-lo-pilot-v2';
+export const STORAGE_KEY = 'rubrics-lo-pilot-v3';
+export const V2_STORAGE_KEY = 'rubrics-lo-pilot-v2';
 export const OLD_STORAGE_KEY = 'rubrics-lo-pilot-v1';
 
 export function migrateV1(oldData) {
@@ -31,7 +32,7 @@ export function hydrateData(value) {
   return {
     ...base,
     ...value,
-    version: 2,
+    version: 3,
     settings: { ...base.settings, ...(value.settings || {}) },
     lessonPeriods: Array.isArray(value.lessonPeriods) && value.lessonPeriods.length ? value.lessonPeriods : DEFAULT_PERIODS,
     classes: Array.isArray(value.classes) ? value.classes.map((item) => ({ ...item, cluster: item.cluster || '3-4' })) : [],
@@ -47,12 +48,14 @@ export function hydrateData(value) {
 export function loadData(storage) {
   try {
     const current = JSON.parse(storage.getItem(STORAGE_KEY));
-    if (current?.version === 2) return hydrateData(current);
+    if (current?.version === 3) return hydrateData(current);
+    const v2 = JSON.parse(storage.getItem(V2_STORAGE_KEY));
+    if (v2?.version === 2) return hydrateData(v2);
     const old = JSON.parse(storage.getItem(OLD_STORAGE_KEY));
     return old ? migrateV1(old) : createInitialData();
   } catch { return createInitialData(); }
 }
 
-export function saveData(storage, data) { storage.setItem(STORAGE_KEY, JSON.stringify({ ...data, version: 2 })); }
-export function hasLocalData(storage) { return Boolean(storage.getItem(STORAGE_KEY) || storage.getItem(OLD_STORAGE_KEY)); }
-export function clearLocalData(storage) { storage.removeItem(STORAGE_KEY); storage.removeItem(OLD_STORAGE_KEY); }
+export function saveData(storage, data) { storage.setItem(STORAGE_KEY, JSON.stringify({ ...data, version: 3 })); }
+export function hasLocalData(storage) { return Boolean(storage.getItem(STORAGE_KEY) || storage.getItem(V2_STORAGE_KEY) || storage.getItem(OLD_STORAGE_KEY)); }
+export function clearLocalData(storage) { storage.removeItem(STORAGE_KEY); storage.removeItem(V2_STORAGE_KEY); storage.removeItem(OLD_STORAGE_KEY); }

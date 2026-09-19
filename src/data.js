@@ -69,7 +69,7 @@ export const DEFAULT_PERIODS = [
 
 export function createInitialData() {
   return {
-    version: 2,
+    version: 3,
     settings: { schoolYearLabel: '2026–2027', schoolYearStart: '2026-08-01', schoolYearEnd: '2027-07-31' },
     classes: DEMO_CLASSES,
     lessonPeriods: DEFAULT_PERIODS,
