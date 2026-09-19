@@ -23,3 +23,17 @@ test('rapporten kunnen per leerling of voor de gehele klas worden afgedrukt', ()
   assert.match(appSource, /<option value="class">Gehele klas<\/option>/);
   assert.match(appSource, /className="class-report-print"/);
 });
+
+test('resultaten vragen eerst om een klaskeuze', () => {
+  assert.match(appSource, /const \[selectedClassId, setSelectedClassId\] = useState\(''\)/);
+  assert.match(appSource, /Kies eerst een klas om de beoordelingen te bekijken/);
+  assert.match(appSource, /setSelectedClassId\(classItem\.id\)/);
+});
+
+test('docent kan de zelfbeoordeling apart bekijken en de effectieve beoordeling aanpassen', () => {
+  assert.match(appSource, /function ReviewModal\s*\(/);
+  assert.match(appSource, /De leerlingbeoordeling is leidend/);
+  assert.match(appSource, /Geldende beoordeling · alleen aanpassen indien nodig/);
+  assert.match(appSource, /Aanpassing opslaan/);
+  assert.match(appSource, /effective: \{ \.\.\.answers \}/);
+});
