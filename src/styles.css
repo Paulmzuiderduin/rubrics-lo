@@ -97,6 +97,10 @@ tbody tr:hover { background: #fafcfd; }
 .rubric-library-item strong { font-size: 16px; }
 .rubric-library-item small { color: var(--muted); line-height: 1.35; }
 .rubric-library-item > div:last-child { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.page-header > .rubric-presentation-actions { display: grid; justify-items: end; gap: 9px; }
+.rubric-presentation-actions > div { display: flex; gap: 9px; }
+.presentation-scope { display: grid; gap: 4px; min-width: 282px; color: #526a7c; font-size: 11px; font-weight: 750; letter-spacing: .035em; text-transform: uppercase; }
+.presentation-scope select { min-height: 40px; border: 1px solid #b9c7d1; border-radius: 4px; background: #fff; color: #244158; padding: 8px 34px 8px 11px; font-size: 14px; font-weight: 650; letter-spacing: 0; text-transform: none; }
 .rubric-matrix { display: grid; gap: 20px; }
 .matrix-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); border: 1px solid #c7d2da; background: #fff; }
 .matrix-row > header { padding: 18px; background: #f4f7f9; border-right: 1px solid #d7dfe5; }
@@ -302,6 +306,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
   .nav-item span { display: block; }
   .main-content { padding: 28px 17px 70px; }
   .page-header, .rubric-detail-header { align-items: flex-start; flex-direction: column; }
+  .page-header > .rubric-presentation-actions { width: 100%; justify-items: stretch; }
+  .rubric-presentation-actions > div { display: grid; grid-template-columns: 1fr 1fr; }
   .floating-primary { bottom: 78px; right: 18px; }
   .week-toolbar { grid-template-columns: auto 1fr auto; gap: 5px; }
   .week-toolbar .secondary-button { font-size: 0; padding-inline: 9px; }

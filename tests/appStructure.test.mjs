@@ -10,3 +10,10 @@ test('rapportpagina bevat de periodefilter en periodebeheer-componenten', () => 
   assert.match(appSource, /<PeriodFilter\b/);
   assert.match(appSource, /<ReportPeriodsModal\b/);
 });
+
+test('rubricpresentatie kan Samen bewegen wel of niet meenemen', () => {
+  assert.match(appSource, /const \[includeTogether, setIncludeTogether\] = useState\(true\)/);
+  assert.match(appSource, /together=\$\{includeTogether \? '1' : '0'\}/);
+  assert.match(appSource, /Leren bewegen \+ Samen bewegen/);
+  assert.match(appSource, /Alleen Leren bewegen/);
+});
