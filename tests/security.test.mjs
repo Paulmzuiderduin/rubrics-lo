@@ -45,3 +45,25 @@ test('snapshot-RPC bindt eigenaarschap server-side en is niet beschikbaar voor a
   assert.match(sql, /grant execute on function public\.save_personal_workspace_snapshot\(jsonb\)[\s\S]*to authenticated/i);
   assert.doesNotMatch(sql, /save_personal_workspace_snapshot\([^)]*owner/i);
 });
+
+test('oude JSON-opslag wordt pas na de RPC-omschakeling verwijderd', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260919103101_remove_legacy_workspace_json.sql', import.meta.url), 'utf8');
+  assert.match(sql, /drop trigger if exists teacher_workspaces_sync_normalized/i);
+  assert.match(sql, /drop function if exists private\.sync_legacy_teacher_workspace\(\)/i);
+  assert.match(sql, /drop table public\.teacher_workspaces/i);
+});
+
+test('publieke snapshot-API draait met gebruikersrechten en heeft gerichte indexen', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260919103240_harden_normalized_workspace_api.sql', import.meta.url), 'utf8');
+  assert.match(sql, /alter function public\.save_personal_workspace_snapshot\(jsonb\)\s+security invoker/i);
+  assert.match(sql, /create index assessment_scores_rubric_domain_idx/i);
+  assert.match(sql, /create index lesson_series_rubric_version_idx/i);
+});
+
+test('private schrijfhelper accepteert geen eigenaar uit de browser', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260919103407_fix_workspace_snapshot_rls_boundary.sql', import.meta.url), 'utf8');
+  assert.match(sql, /create function private\.replace_current_workspace_snapshot\(\s*payload jsonb/i);
+  assert.match(sql, /caller_id uuid := \(select auth\.uid\(\)\)/i);
+  assert.doesNotMatch(sql, /replace_current_workspace_snapshot\([^)]*owner/i);
+  assert.match(sql, /create or replace function public\.save_personal_workspace_snapshot\(payload jsonb\)[\s\S]*security invoker/i);
+});
