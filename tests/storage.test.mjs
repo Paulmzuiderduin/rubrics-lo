@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CLASS_CLUSTERS, RUBRIC_CATEGORIES, RUBRICS } from '../src/data.js';
+import { CLASS_CLUSTERS, LEARNING_LINES, RUBRICS } from '../src/data.js';
 import { migrateV1 } from '../src/storage.mjs';
 
 test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wijzigen', () => {
@@ -11,19 +11,29 @@ test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wij
   ]);
 });
 
-test('rubricbibliotheek toont het VO-raamwerk en deelt KanJam in bij doelspelen', () => {
-  assert.deepEqual(RUBRIC_CATEGORIES.map((item) => item.name), [
+test('rubricbibliotheek toont de HAN-leerlijnen en deelt KanJam in bij doelspelen', () => {
+  assert.deepEqual(LEARNING_LINES.map((item) => item.name), [
+    'Lopen',
+    'Springen (atletiek)',
+    'Werpen',
+    'Bewegen op Muziek',
     'Doelspelen',
+    'Spelen met inblijven en uitmaken',
     'Terugslagspelen',
-    'Slag- en loopspelen',
-    'Tik- en afgooispelen',
-    'Turnen',
-    'Bewegen op muziek',
-    'Atletiek',
-    'Zelfverdediging',
-    'Actuele bewegingsactiviteiten',
+    'Balanceren',
+    'Springen (turnen)',
+    'Zwaaien (turnen)',
+    'Stoeispelen',
+    'Trefspelen (zelfverdediging)',
+    'Zwemmen',
+    'Golf',
+    'Kanovaren',
+    'Klimmen',
+    'Mountainbiken',
+    'Schaatsen',
+    'Skaten/skeeleren',
   ]);
-  assert.equal(RUBRICS.find((item) => item.id === 'kanjam')?.category, 'target-games');
+  assert.equal(RUBRICS.find((item) => item.id === 'kanjam')?.learningLine, 'target-games');
 });
 
 test('v1-data migreert zonder klassen, leerlingen of beoordelingen te verliezen', () => {

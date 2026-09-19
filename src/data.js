@@ -12,26 +12,35 @@ export const LEVELS = [
   { key: 'black', name: 'Zwart', color: '#202a33' },
 ];
 
-// Practical library categories for VO. These combine the familiar activity
-// areas from the upper years with the game themes teachers use when planning
-// lessons. They are separate from the rubric goal domains.
-export const RUBRIC_CATEGORIES = [
+// VO leerlijnen from the HAN lesson-preparation format. They are separate
+// from the goal domains used inside a rubric.
+export const LEARNING_LINES = [
+  { key: 'running', name: 'Lopen', description: 'Rubrics voor loopactiviteiten binnen het voortgezet onderwijs.' },
+  { key: 'athletics-jumping', name: 'Springen (atletiek)', description: 'Rubrics voor atletische springonderdelen.' },
+  { key: 'throwing', name: 'Werpen', description: 'Rubrics voor werpen, stoten en slingeren.' },
+  { key: 'movement-to-music', name: 'Bewegen op Muziek', description: 'Rubrics voor ritme, dans en bewegen op muziek.' },
   { key: 'target-games', name: 'Doelspelen', description: 'Basketbal, handbal, voetbal, unihockey en frisbeespelen.' },
+  { key: 'in-out-games', name: 'Spelen met inblijven en uitmaken', description: 'Rubrics voor spelvormen waarin spelers inblijven of worden uitgemaakt.' },
   { key: 'rebound-games', name: 'Terugslagspelen', description: 'Volleybal, badminton, tennis, tafeltennis en varianten.' },
-  { key: 'striking-fielding-games', name: 'Slag- en loopspelen', description: 'Honkbal, softbal, cricket en verwante spelvormen.' },
-  { key: 'tag-dodge-games', name: 'Tik- en afgooispelen', description: 'Tikspelen, afgooispelen en andere vang- en ontwijkspelen.' },
-  { key: 'gymnastics', name: 'Turnen', description: 'Springen, zwaaien, balanceren, acrobatiek en klimmen.' },
-  { key: 'movement-to-music', name: 'Bewegen op muziek', description: 'Ritme, dans en conditionele vormen op muziek.' },
-  { key: 'athletics', name: 'Atletiek', description: 'Hardlopen, ver- en hoogspringen, werpen, stoten en slingeren.' },
-  { key: 'self-defence', name: 'Zelfverdediging', description: 'Stoeispelen en trefspelen met aandacht voor veiligheid.' },
-  { key: 'current-activities', name: 'Actuele bewegingsactiviteiten', description: 'Outdoor-, water-, winter- en andere nieuwe bewegingsactiviteiten.' },
+  { key: 'balancing', name: 'Balanceren', description: 'Rubrics voor balanceren op en met verschillende materialen.' },
+  { key: 'gymnastics-jumping', name: 'Springen (turnen)', description: 'Rubrics voor turnsprongen en toestelgebonden springen.' },
+  { key: 'gymnastics-swinging', name: 'Zwaaien (turnen)', description: 'Rubrics voor zwaaien aan en op turntoestellen.' },
+  { key: 'wrestling-games', name: 'Stoeispelen', description: 'Rubrics voor gereguleerde stoeivormen en samenspel.' },
+  { key: 'striking-self-defence', name: 'Trefspelen (zelfverdediging)', description: 'Rubrics voor veilige trefspelen binnen zelfverdediging.' },
+  { key: 'swimming', name: 'Zwemmen', description: 'Rubrics voor zwemactiviteiten en bewegen in het water.' },
+  { key: 'golf', name: 'Golf', description: 'Rubrics voor golf en aanverwante mikactiviteiten.' },
+  { key: 'canoeing', name: 'Kanovaren', description: 'Rubrics voor voortbewegen en handelen in een kano.' },
+  { key: 'climbing', name: 'Klimmen', description: 'Rubrics voor klimmen, zekeren en veilig samenwerken.' },
+  { key: 'mountain-biking', name: 'Mountainbiken', description: 'Rubrics voor fietsvaardigheid op wisselend terrein.' },
+  { key: 'ice-skating', name: 'Schaatsen', description: 'Rubrics voor voortbewegen en manoeuvreren op schaatsen.' },
+  { key: 'inline-skating', name: 'Skaten/skeeleren', description: 'Rubrics voor voortbewegen en manoeuvreren op skates of skeelers.' },
 ];
 
 export const RUBRICS = [{
   id: 'kanjam',
   title: 'KanJam',
   form: 'Spel',
-  category: 'target-games',
+  learningLine: 'target-games',
   description: 'Gericht werpen, tactiek afspreken en samen spelen.',
   criteria: [
     {
