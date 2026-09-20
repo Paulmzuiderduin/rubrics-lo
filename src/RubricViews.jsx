@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowLeft, Check, Image, Search, Video, X } from 'lucide-react';
-import { LEVELS } from './data.js';
+import { criteriaForRubric, LEVELS } from './data.js';
 
 export const levelFor = (key) => LEVELS.find((level) => level.key === key);
 
@@ -14,12 +14,14 @@ export function MediaPlaceholders() {
   return <div className="media-placeholders"><div><Image size={25} /><strong>Afbeelding volgt</strong><span>Hier komt een gecontroleerd voorbeeldbeeld.</span></div><div><Video size={25} /><strong>Video volgt</strong><span>Hier komt een korte bewegingsdemonstratie.</span></div></div>;
 }
 
-export function RubricMatrix({ rubric, activeKeys = ['movement', 'together'], compact = false }) {
-  return <div className={compact ? 'rubric-matrix compact' : 'rubric-matrix'}>{rubric.criteria.filter((criterion) => activeKeys.includes(criterion.key)).map((criterion) => <section key={criterion.key} className="matrix-row"><header><h2>{criterion.title}</h2><p>{criterion.short}</p></header><div className="matrix-levels">{LEVELS.map((level) => <div key={level.key} className="matrix-level" style={{ '--level-color': level.color }}><strong>{level.name}</strong><p>{criterion.levels[level.key].summary}</p></div>)}</div></section>)}</div>;
+export function RubricMatrix({ rubric, activeKeys, compact = false }) {
+  const criteria = activeKeys ? rubric.criteria.filter((criterion) => activeKeys.includes(criterion.key)) : rubric.criteria;
+  return <div className={compact ? 'rubric-matrix compact' : 'rubric-matrix'}>{criteria.map((criterion) => <section key={criterion.key} className="matrix-row"><header>{criterion.domainLabel && criterion.domainLabel !== criterion.title && <span className="matrix-domain">{criterion.domainLabel}</span>}<h2>{criterion.title}</h2><p>{criterion.short}</p></header><div className="matrix-levels">{LEVELS.map((level) => <div key={level.key} className="matrix-level" style={{ '--level-color': level.color }}><strong>{level.name}</strong><p>{criterion.levels[level.key].summary}</p></div>)}</div></section>)}</div>;
 }
 
-export function PresentationMode({ rubric, activeKeys = ['movement', 'together'], sessionLabel }) {
-  return <main className="presentation-mode"><header><div><p>Rubrics LO</p><h1>{rubric.title}</h1></div><div><strong>{rubric.form}</strong>{sessionLabel && <span>{sessionLabel}</span>}</div></header><RubricMatrix rubric={rubric} activeKeys={activeKeys} /><MediaPlaceholders /></main>;
+export function PresentationMode({ rubric, activeKeys, includeTogether = true, sessionLabel }) {
+  const visibleKeys = activeKeys || criteriaForRubric(rubric, includeTogether).map((criterion) => criterion.key);
+  return <main className="presentation-mode"><header><div><p>Rubrics LO</p><h1>{rubric.title}</h1></div><div><strong>{rubric.form}</strong>{sessionLabel && <span>{sessionLabel}</span>}</div></header><RubricMatrix rubric={rubric} activeKeys={visibleKeys} /><MediaPlaceholders /></main>;
 }
 
 function ExitConfirm({ onCancel, onConfirm }) {
@@ -35,12 +37,12 @@ function ExitConfirm({ onCancel, onConfirm }) {
 
 function LevelPicker({ criterion, value, onChange }) {
   const selected = value && criterion.levels[value];
-  return <section className="assessment-rubric"><header><p>Waar sta je nu?</p><h2>{criterion.title}</h2><span>{criterion.short}</span></header><div className="level-grid">{LEVELS.map((level) => <button key={level.key} className={value === level.key ? 'level-option selected' : 'level-option'} style={{ '--level-color': level.color }} onClick={() => onChange(level.key)}><span className="level-name">{level.name}</span><span className="level-summary">{criterion.levels[level.key].summary}</span>{value === level.key && <Check size={18} />}</button>)}</div>{selected && <div className="level-detail" style={{ '--level-color': levelFor(value).color }}><div /><p><strong>{levelFor(value).name}</strong>{selected.detail}<small><b>Volgende uitdaging</b>{selected.next}</small></p></div>}</section>;
+  return <section className="assessment-rubric"><header><p>{criterion.domainLabel || 'Waar sta je nu?'}</p><h2>{criterion.title}</h2><span>{criterion.short}</span></header><div className="level-grid">{LEVELS.map((level) => <button key={level.key} className={value === level.key ? 'level-option selected' : 'level-option'} style={{ '--level-color': level.color }} onClick={() => onChange(level.key)}><span className="level-name">{level.name}</span><span className="level-summary">{criterion.levels[level.key].summary}</span>{value === level.key && <Check size={18} />}</button>)}</div>{selected && <div className="level-detail" style={{ '--level-color': levelFor(value).color }}><div /><p><strong>{levelFor(value).name}</strong>{selected.detail}<small><b>Volgende uitdaging</b>{selected.next}</small></p></div>}</section>;
 }
 
 export function SessionScreen({ rubric, classItem, series, mode, onSubmit, onExit }) {
-  const activeKeys = series.includeTogether ? ['movement', 'together'] : ['movement'];
-  const criteria = rubric.criteria.filter((item) => activeKeys.includes(item.key));
+  const criteria = criteriaForRubric(rubric, series.includeTogether);
+  const activeKeys = criteria.map((criterion) => criterion.key);
   const [studentId, setStudentId] = useState('');
   const [search, setSearch] = useState('');
   const [step, setStep] = useState(0);

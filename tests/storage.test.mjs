@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CLASS_CLUSTERS, LEARNING_LINES, RUBRICS } from '../src/data.js';
+import { CLASS_CLUSTERS, criteriaForRubric, LEARNING_LINES, RUBRICS } from '../src/data.js';
 import { migrateV1 } from '../src/storage.mjs';
 
 test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wijzigen', () => {
@@ -11,7 +11,7 @@ test('klasclusters gebruiken de bouwbenamingen zonder opgeslagen sleutels te wij
   ]);
 });
 
-test('rubricbibliotheek toont de HAN-leerlijnen en deelt KanJam in bij doelspelen', () => {
+test('rubricbibliotheek toont de HAN-leerlijnen en deelt rubrics per leerlijn in', () => {
   assert.deepEqual(LEARNING_LINES.map((item) => item.name), [
     'Lopen',
     'Springen (atletiek)',
@@ -34,6 +34,14 @@ test('rubricbibliotheek toont de HAN-leerlijnen en deelt KanJam in bij doelspele
     'Skaten/skeeleren',
   ]);
   assert.equal(RUBRICS.find((item) => item.id === 'kanjam')?.learningLine, 'target-games');
+  assert.equal(RUBRICS.find((item) => item.id === 'speerwerpen')?.learningLine, 'throwing');
+});
+
+test('een rubric ondersteunt meerdere rijen binnen Beter bewegen', () => {
+  const rubric = RUBRICS.find((item) => item.id === 'speerwerpen');
+  assert.deepEqual(rubric.criteria.map((item) => item.key), ['approach-release', 'landing', 'together']);
+  assert.deepEqual(rubric.criteria.map((item) => item.domain), ['movement', 'movement', 'together']);
+  assert.deepEqual(criteriaForRubric(rubric, false).map((item) => item.key), ['approach-release', 'landing']);
 });
 
 test('v1-data migreert zonder klassen, leerlingen of beoordelingen te verliezen', () => {

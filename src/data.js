@@ -44,7 +44,7 @@ export const RUBRICS = [{
   description: 'Gericht werpen, tactiek afspreken en samen spelen.',
   criteria: [
     {
-      key: 'movement', title: 'Leren bewegen', short: 'Backhandworp richting de KanJam',
+      key: 'movement', domain: 'movement', domainLabel: 'Beter bewegen', title: 'Backhandworp', short: 'Backhandworp richting de KanJam',
       levels: {
         green: { summary: 'Ik krijg de frisbee vooruit met een backhandworp.', detail: 'Je staat zijwaarts en zwaait de frisbee met een rustige beweging vooruit. De frisbee komt in de speelrichting terecht.', next: 'Oefen een vlakke worp die op borsthoogte bij je medespeler aankomt.' },
         blue: { summary: 'Ik werp de frisbee meestal vlak en in de richting van mijn medespeler.', detail: 'Je gebruikt een backhandworp die meestal horizontaal blijft. Je medespeler kan de frisbee regelmatig verwerken.', next: 'Richt nauwkeuriger en pas de kracht aan verschillende afstanden aan.' },
@@ -54,7 +54,7 @@ export const RUBRICS = [{
       },
     },
     {
-      key: 'together', title: 'Samen bewegen', short: 'Afspreken, samenspelen en feedback geven',
+      key: 'together', domain: 'together', domainLabel: 'Samen bewegen', title: 'Samen bewegen', short: 'Afspreken, samenspelen en feedback geven',
       levels: {
         green: { summary: 'Ik speel mee en houd me aan de basisafspraken.', detail: 'Je wacht op je beurt, blijft betrokken en volgt de afspraken die vooraf zijn gemaakt.', next: 'Maak samen één eenvoudige afspraak over richten of positie kiezen.' },
         blue: { summary: 'Ik maak eenvoudige afspraken en help mijn medespeler tijdens het spel.', detail: 'Je overlegt kort, moedigt aan en zorgt dat jullie allebei actief mee kunnen doen.', next: 'Geef na een worp één concrete tip die je medespeler direct kan gebruiken.' },
@@ -65,7 +65,50 @@ export const RUBRICS = [{
     },
   ],
   media: { image: null, video: null },
+}, {
+  id: 'speerwerpen',
+  title: 'Speerwerpen',
+  form: 'Atletiek',
+  learningLine: 'throwing',
+  description: 'Aanloop en afworp verbinden, de speer gericht laten landen en veilig samenwerken.',
+  criteria: [
+    {
+      key: 'approach-release', domain: 'movement', domainLabel: 'Beter bewegen', title: 'Aanloop & afworp', short: 'De aanloop verbinden aan een vloeiende afworp',
+      levels: {
+        green: { summary: 'Ik werp de speer uit stand.', detail: 'Je werpt de speer uit stand en richt je op een veilige, voorwaartse afworp.', next: 'Werp vanuit een driepas en probeer de aanloop met de afworp te verbinden.' },
+        blue: { summary: 'Ik werp de speer vanuit een driepas. De aanloop en afworp zijn nog twee losse elementen.', detail: 'Je gebruikt een aansluitpas of kruispas, maar onderbreekt de beweging nog vóór de afworp.', next: 'Verbind de driepas en afworp tot één natuurlijk vloeiende beweging.' },
+        red: { summary: 'Ik werp de speer in een natuurlijk vloeiende beweging vanuit de driepas.', detail: 'Je verbindt een aansluitpas of kruispas zonder duidelijke onderbreking aan de afworp.', next: 'Behoud deze vloeiende beweging vanuit een langere aanloop.' },
+        purple: { summary: 'Ik werp de speer in een natuurlijk vloeiende beweging vanuit een langere aanloop.', detail: 'Je bouwt de aanloop uit en houdt de overgang naar de afworp vloeiend.', next: 'Gebruik de opgebouwde snelheid uit de aanloop om de speer krachtiger te lanceren.' },
+        black: { summary: 'Ik gebruik de snelheid van mijn aanloop in een natuurlijk vloeiende beweging om de speer te lanceren.', detail: 'Je zet de snelheid uit de aanloop doelgericht om in een vloeiende en krachtige afworp.', next: 'Behoud deze uitvoering bij verschillende aanlooplengtes en onder wisselende omstandigheden.' },
+      },
+    },
+    {
+      key: 'landing', domain: 'movement', domainLabel: 'Beter bewegen', title: 'Landing', short: 'De speer in het verlengde van de werprichting laten landen',
+      levels: {
+        green: { summary: 'De achterkant van mijn speer raakt eerst de grond en de speer ligt niet in het verlengde van de werprichting.', detail: 'De speer landt met de achterkant eerst en wijkt duidelijk af van de werprichting.', next: 'Laat de speer meer in het verlengde van de werprichting landen.' },
+        blue: { summary: 'De achterkant van mijn speer raakt als eerste de grond.', detail: 'De speer beweegt al gerichter, maar landt nog met de achterkant eerst.', next: 'Laat de speer vlak landen, met voor- en achterkant ongeveer tegelijk.' },
+        red: { summary: 'Mijn speer komt plat op de grond terecht.', detail: 'De speer landt vlak, zonder dat de voorkant duidelijk als eerste de grond raakt.', next: 'Zorg dat de voorkant van de speer als eerste de grond raakt.' },
+        purple: { summary: 'De voorkant van mijn speer raakt als eerste de grond, maar de speer ligt uiteindelijk plat.', detail: 'De punt raakt eerst de grond, maar blijft nog niet in de bodem staan.', next: 'Laat de voorkant onder ongeveer 45 graden in de grond steken.' },
+        black: { summary: 'De voorkant van mijn speer steekt onder een hoek van ongeveer 45 graden in de grond.', detail: 'De speer landt met de voorkant eerst en blijft onder ongeveer 45 graden in de grond staan.', next: 'Behoud deze landing bij verschillende afstanden en worpen.' },
+      },
+    },
+    {
+      key: 'together', domain: 'together', domainLabel: 'Samen bewegen', title: 'Samen bewegen', short: 'Rekening houden met anderen en gerichte feedback geven',
+      levels: {
+        green: { summary: 'Ik heb nog te weinig aandacht voor medeleerlingen om rekening met hen te houden en hen te helpen.', detail: 'Je aandacht ligt vooral bij je eigen uitvoering, waardoor veilig samenwerken en helpen nog weinig zichtbaar zijn.', next: 'Let bewust op de veiligheid en ruimte van medeleerlingen.' },
+        blue: { summary: 'Ik houd rekening met medeleerlingen, maar heb nog weinig tips om hen te helpen.', detail: 'Je houdt voldoende rekening met anderen, maar geeft nog weinig bruikbare feedback.', next: 'Geef een medeleerling één concrete tip over de uitvoering.' },
+        red: { summary: 'Ik houd rekening met medeleerlingen en help hen wanneer dat nodig is.', detail: 'Je werkt veilig samen en biedt hulp wanneer een medeleerling die nodig heeft.', next: 'Geef vaker een gerichte tip die een medeleerling direct kan toepassen.' },
+        purple: { summary: 'Ik houd rekening met medeleerlingen en help hen bij verschillende sporten met tips.', detail: 'Je hebt aandacht voor anderen en geeft bij meerdere activiteiten bruikbare feedback.', next: 'Geef zowel een concreet verbeterpunt als een benoemd sterk punt.' },
+        black: { summary: 'Ik houd rekening met medeleerlingen en help hen graag met gerichte tips en tops.', detail: 'Je werkt veilig en betrokken samen en geeft anderen concrete verbeterpunten en positieve feedback.', next: 'Blijf je feedback afstemmen op wat een medeleerling op dat moment nodig heeft.' },
+      },
+    },
+  ],
+  media: { image: null, video: null },
 }];
+
+export function criteriaForRubric(rubric, includeTogether = true) {
+  return rubric.criteria.filter((criterion) => includeTogether || criterion.domain !== 'together');
+}
 
 export const RUBRIC = RUBRICS[0].criteria;
 

@@ -14,8 +14,8 @@ test('rapportpagina bevat de periodefilter en periodebeheer-componenten', () => 
 test('rubricpresentatie kan Samen bewegen wel of niet meenemen', () => {
   assert.match(appSource, /const \[includeTogether, setIncludeTogether\] = useState\(true\)/);
   assert.match(appSource, /together=\$\{includeTogether \? '1' : '0'\}/);
-  assert.match(appSource, /Leren bewegen \+ Samen bewegen/);
-  assert.match(appSource, /Alleen Leren bewegen/);
+  assert.match(appSource, /Beter bewegen \+ Samen bewegen/);
+  assert.match(appSource, /Alleen Beter bewegen/);
 });
 
 test('rapporten kunnen per leerling of voor de gehele klas worden afgedrukt', () => {
@@ -43,4 +43,11 @@ test('resultaten kunnen per leerlijn worden bekeken', () => {
   assert.match(appSource, /item\.rubric\.learningLine === learningLine\.key/);
   assert.match(appSource, /className="results-learning-line-control"/);
   assert.doesNotMatch(appSource, /Oorspronkelijke leerlingbeoordeling/);
+});
+
+test('rubrics en resultaten ondersteunen een variabel aantal beoordelingsrijen', () => {
+  assert.match(appSource, /rubric\.criteria\.filter\(\(criterion\) => assessment\.effective\[criterion\.key\]\)/);
+  assert.doesNotMatch(appSource, /assessment\.effective\.movement/);
+  assert.match(appSource, /Kies eerst een HAN-leerlijn en daarna een sport of spel/);
+  assert.match(appSource, /className="learning-line-rubrics"/);
 });
