@@ -26,7 +26,7 @@ test('rapporten kunnen per leerling of voor de gehele klas worden afgedrukt', ()
 
 test('resultaten vragen eerst om een klaskeuze', () => {
   assert.match(appSource, /const \[selectedClassId, setSelectedClassId\] = useState\(''\)/);
-  assert.match(appSource, /Kies eerst een klas om de beoordelingen te bekijken/);
+  assert.match(appSource, /Kies eerst een klas om de beoordelingen per leerlijn te bekijken/);
   assert.match(appSource, /setSelectedClassId\(classItem\.id\)/);
 });
 
@@ -38,9 +38,9 @@ test('docent kan de zelfbeoordeling apart bekijken en de effectieve beoordeling 
   assert.match(appSource, /effective: \{ \.\.\.answers \}/);
 });
 
-test('resultaten kunnen wisselen tussen de geldende en oorspronkelijke leerlingbeoordeling', () => {
-  assert.match(appSource, /const \[resultView, setResultView\] = useState\('effective'\)/);
-  assert.match(appSource, /Geldende beoordeling/);
-  assert.match(appSource, /Oorspronkelijke leerlingbeoordeling/);
-  assert.match(appSource, /Docent aangepast/);
+test('resultaten kunnen per leerlijn worden bekeken', () => {
+  assert.match(appSource, /const \[selectedLearningLine, setSelectedLearningLine\] = useState\(''\)/);
+  assert.match(appSource, /item\.rubric\.learningLine === learningLine\.key/);
+  assert.match(appSource, /className="results-learning-line-control"/);
+  assert.doesNotMatch(appSource, /Oorspronkelijke leerlingbeoordeling/);
 });
