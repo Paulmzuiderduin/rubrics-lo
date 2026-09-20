@@ -73,7 +73,7 @@ function AuthForm() {
           </div>
           <footer className="auth-contact">
             <span>Vraag, idee of interesse?</span>
-            <a href="mailto:info@paulzuiderduin.com"><Mail size={17} />info@paulzuiderduin.com</a>
+            <a href="mailto:rubrics@paulzuiderduin.com"><Mail size={17} />rubrics@paulzuiderduin.com</a>
           </footer>
         </section>
 

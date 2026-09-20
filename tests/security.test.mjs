@@ -26,6 +26,22 @@ test('frontendconfiguratie accepteert alleen een publishable key', async () => {
   assert.doesNotMatch(client, /service_role|sb_secret_|VITE_SUPABASE_ANON_KEY/);
 });
 
+test('authmails gebruiken de eigen Rubrics LO-afzender en Nederlandse templates', async () => {
+  const config = await readFile(new URL('../supabase/config.toml', import.meta.url), 'utf8');
+  const templateNames = ['invite', 'confirmation', 'recovery', 'magic-link', 'email-change', 'reauthentication'];
+
+  assert.match(config, /enable_confirmations = true/);
+  assert.doesNotMatch(config, /smtp[\s\S]{0,500}(password|pass)\s*=\s*"(?!env\()/i);
+
+  for (const name of templateNames) {
+    const html = await readFile(new URL(`../supabase/templates/${name}.html`, import.meta.url), 'utf8');
+    assert.match(html, /Rubrics LO/);
+    assert.match(html, /rubrics@paulzuiderduin\.com/);
+    assert.match(html, /lang="nl"/);
+    assert.doesNotMatch(html, /supabase/i);
+  }
+});
+
 test('productdata is relationeel en voorbereid op latere workspaceleden', async () => {
   const sql = await readFile(new URL('../supabase/migrations/20260918161320_normalized_personal_workspaces.sql', import.meta.url), 'utf8');
   for (const table of ['workspaces', 'workspace_members', 'classes', 'students', 'lesson_series', 'lesson_occurrences', 'assessments', 'assessment_scores']) {

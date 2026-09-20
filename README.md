@@ -49,6 +49,19 @@ Supabase ondersteunt 2FA/MFA met onder andere TOTP-authenticatorapps. De huidige
 
 Geplande botbescherming: Cloudflare Turnstile voor inloggen, registreren en wachtwoordherstel. Activeer **Enable CAPTCHA protection** in Supabase pas nadat de Turnstile-widget en `captchaToken` in alle drie frontendflows zijn toegevoegd en getest.
 
+### Auth-e-mail
+
+De vaste afzender is `Rubrics LO <rubrics@paulzuiderduin.com>`. De Nederlandse HTML-templates staan in `supabase/templates` en zijn voor lokaal testen gekoppeld in `supabase/config.toml`.
+
+Voor de gehoste omgeving:
+
+1. Configureer onder **Authentication → SMTP Settings** een eigen SMTP-provider met `rubrics@paulzuiderduin.com` als afzender en `Rubrics LO` als afzendernaam. Bewaar SMTP-wachtwoorden uitsluitend in Supabase, nooit in Git of in een `VITE_`-variabele.
+2. Publiceer de vereiste SPF-, DKIM- en DMARC-records bij de DNS-provider.
+3. Kopieer onderwerp en HTML uit `supabase/templates` naar **Authentication → Email Templates**. De app gebruikt momenteel `confirmation.html` en `recovery.html`; de overige templates voorkomen later terugval op standaard Supabase-teksten.
+4. Test registratie en wachtwoordherstel met een echt extern e-mailadres voordat openbare registratie wordt aangezet.
+
+Een Send Email Auth Hook met Edge Function is bewust nog niet nodig. Custom SMTP en de eigen templates vervangen de standaardafzender en standaardteksten met minder storingspunten. Een hook blijft later mogelijk voor conditionele inhoud of volledige providercontrole.
+
 ## Publicatie
 
 GitHub Pages leest tijdens de build deze repositoryvariabelen:

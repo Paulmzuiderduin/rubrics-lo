@@ -9,7 +9,7 @@ test('publieke beginpagina legt doel, functies en contact uit', async () => {
   assert.match(authPage, /Formatief handelen/);
   assert.match(authPage, /Rubrics specifiek voor het VO/);
   assert.match(authPage, /onderwijsvisie van de HAN/);
-  assert.match(authPage, /mailto:info@paulzuiderduin\.com/);
+  assert.match(authPage, /mailto:rubrics@paulzuiderduin\.com/);
   assert.match(authPage, /Beveiligde docentenomgeving/);
   assert.match(authPage, /Inloggen/);
 });
