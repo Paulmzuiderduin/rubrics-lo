@@ -143,6 +143,10 @@ tbody tr:hover { background: #fafcfd; }
 .agenda-actions .icon-button { width: 31px; height: 31px; }
 .results-header { margin-bottom: 22px; }
 .results-class-choice { margin-top: 0; }
+.results-view-control { display: grid; gap: 4px; min-width: 275px; color: #526a7c; font-size: 11px; font-weight: 750; letter-spacing: .035em; text-transform: uppercase; }
+.results-view-control select { min-height: 40px; border: 1px solid #b9c7d1; border-radius: 4px; background: #fff; color: #244158; padding: 8px 34px 8px 11px; font-size: 14px; font-weight: 650; letter-spacing: 0; text-transform: none; }
+.result-value { display: grid; justify-items: start; gap: 4px; }
+.result-value small { color: #667c8c; font-size: 10px; font-weight: 700; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 24px; background: rgba(10, 26, 39, .58); }
 .modal { width: min(520px, 100%); max-height: calc(100vh - 48px); overflow-y: auto; background: #fff; border: 1px solid #afbdc8; box-shadow: 0 18px 55px rgba(0, 0, 0, .18); }
 .modal.wide { width: min(840px, 100%); }
@@ -314,6 +318,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
   .main-content { padding: 28px 17px 70px; }
   .rubric-library { grid-template-columns: 1fr; }
   .page-header, .rubric-detail-header { align-items: flex-start; flex-direction: column; }
+  .results-view-control { width: 100%; }
   .page-header > .rubric-presentation-actions { width: 100%; justify-items: stretch; }
   .rubric-presentation-actions > div { display: grid; grid-template-columns: 1fr 1fr; }
   .floating-primary { bottom: 78px; right: 18px; }

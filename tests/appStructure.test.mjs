@@ -37,3 +37,10 @@ test('docent kan de zelfbeoordeling apart bekijken en de effectieve beoordeling 
   assert.match(appSource, /Aanpassing opslaan/);
   assert.match(appSource, /effective: \{ \.\.\.answers \}/);
 });
+
+test('resultaten kunnen wisselen tussen de geldende en oorspronkelijke leerlingbeoordeling', () => {
+  assert.match(appSource, /const \[resultView, setResultView\] = useState\('effective'\)/);
+  assert.match(appSource, /Geldende beoordeling/);
+  assert.match(appSource, /Oorspronkelijke leerlingbeoordeling/);
+  assert.match(appSource, /Docent aangepast/);
+});
