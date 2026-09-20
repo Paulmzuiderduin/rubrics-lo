@@ -25,7 +25,7 @@ test('rapporten kunnen per leerling of voor de gehele klas worden afgedrukt', ()
 });
 
 test('resultaten vragen eerst om een klaskeuze', () => {
-  assert.match(appSource, /const \[selectedClassId, setSelectedClassId\] = useState\(''\)/);
+  assert.match(appSource, /const \[resultsClassId, setResultsClassId\] = useState\(initialRoute\.resultsClassId\)/);
   assert.match(appSource, /Kies eerst een klas om de beoordelingen per leerlijn te bekijken/);
   assert.match(appSource, /setSelectedClassId\(classItem\.id\)/);
 });
@@ -39,7 +39,7 @@ test('docent kan de zelfbeoordeling apart bekijken en de effectieve beoordeling 
 });
 
 test('resultaten kunnen per leerlijn worden bekeken', () => {
-  assert.match(appSource, /const \[selectedLearningLine, setSelectedLearningLine\] = useState\(''\)/);
+  assert.match(appSource, /const \[resultsLearningLine, setResultsLearningLine\] = useState\(initialRoute\.resultsLearningLine\)/);
   assert.match(appSource, /item\.rubric\.learningLine === learningLine\.key/);
   assert.match(appSource, /className="results-learning-line-control"/);
   assert.doesNotMatch(appSource, /Oorspronkelijke leerlingbeoordeling/);
@@ -53,8 +53,14 @@ test('rubrics en resultaten ondersteunen een variabel aantal beoordelingsrijen',
 });
 
 test('rubricbibliotheek ondersteunt bouwvarianten per sport of spel', () => {
-  assert.match(appSource, /const \[selectedActivityId, setSelectedActivityId\] = useState\(null\)/);
+  assert.match(appSource, /const \[rubricActivity, setRubricActivity\] = useState\(initialRoute\.rubricActivity\)/);
   assert.match(appSource, /Onderbouw · Middenbouw · Bovenbouw/);
   assert.match(appSource, /CLASS_CLUSTERS\.map\(\(cluster\)/);
   assert.match(appSource, /rubricsForCluster\(classItem\?\.cluster\)/);
+});
+
+test('de huidige pagina wordt in de URL bewaard voor verversen', () => {
+  assert.match(appSource, /readWorkspaceRoute\(window\.location\.search, data\)/);
+  assert.match(appSource, /writeWorkspaceSearch\(url\.search/);
+  assert.match(appSource, /window\.history\.replaceState/);
 });
