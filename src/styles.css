@@ -100,6 +100,19 @@ tbody tr:hover { background: #fafcfd; }
 .rubric-library-item strong { font-size: 16px; }
 .rubric-library-item span { grid-column: 1; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .rubric-library-item em { grid-column: 2; grid-row: 2 / span 2; align-self: center; color: var(--muted); font-size: 11px; font-style: normal; }
+.generic-rubric-notice { max-width: 920px; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 14px; padding: 14px 16px; border: 1px solid #b9c8d2; background: #f5f8fa; }
+.generic-rubric-notice > div { display: grid; gap: 2px; }
+.generic-rubric-notice small, .rubric-variant small { color: var(--blue); font-size: 9px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.generic-rubric-notice strong { color: var(--navy); font-size: 15px; }
+.generic-rubric-notice span { color: var(--muted); font-size: 12px; }
+.rubric-variants { max-width: 920px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #c7d2da; background: #fff; }
+.rubric-variant { min-height: 112px; display: grid; align-content: center; gap: 5px; padding: 16px; border: 0; border-right: 1px solid #dce3e8; background: #f8fafb; color: var(--navy); text-align: left; }
+.rubric-variant:last-child { border-right: 0; }
+.rubric-variant strong { font-size: 17px; }
+.rubric-variant span { color: var(--muted); font-size: 12px; }
+.rubric-variant.available { position: relative; background: #fff; }
+.rubric-variant.available:hover { background: #f5f8fa; }
+.rubric-variant.available svg { position: absolute; top: 50%; right: 14px; color: var(--blue); transform: translateY(-50%); }
 .page-header > .rubric-presentation-actions { display: grid; justify-items: end; gap: 9px; }
 .rubric-presentation-actions > div { display: flex; gap: 9px; }
 .presentation-scope { display: grid; gap: 4px; min-width: 282px; color: #526a7c; font-size: 11px; font-weight: 750; letter-spacing: .035em; text-transform: uppercase; }
@@ -326,6 +339,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
   .nav-item span { display: block; }
   .main-content { padding: 28px 17px 70px; }
   .rubric-library { grid-template-columns: 1fr; }
+  .rubric-variants { grid-template-columns: 1fr; }
+  .rubric-variant { border-right: 0; border-bottom: 1px solid #dce3e8; }
+  .rubric-variant:last-child { border-bottom: 0; }
+  .generic-rubric-notice { align-items: stretch; flex-direction: column; gap: 12px; }
   .page-header, .rubric-detail-header { align-items: flex-start; flex-direction: column; }
   .results-learning-line-control { width: 100%; }
   .page-header > .rubric-presentation-actions { width: 100%; justify-items: stretch; }

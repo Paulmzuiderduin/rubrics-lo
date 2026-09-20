@@ -38,9 +38,11 @@ export const LEARNING_LINES = [
 
 export const RUBRICS = [{
   id: 'kanjam',
+  activityId: 'kanjam',
   title: 'KanJam',
   form: 'Spel',
   learningLine: 'target-games',
+  cluster: null,
   description: 'Gericht werpen, tactiek afspreken en samen spelen.',
   criteria: [
     {
@@ -67,9 +69,11 @@ export const RUBRICS = [{
   media: { image: null, video: null },
 }, {
   id: 'speerwerpen',
+  activityId: 'speerwerpen',
   title: 'Speerwerpen',
   form: 'Atletiek',
   learningLine: 'throwing',
+  cluster: null,
   description: 'Aanloop en afworp verbinden, de speer gericht laten landen en veilig samenwerken.',
   criteria: [
     {
@@ -108,6 +112,23 @@ export const RUBRICS = [{
 
 export function criteriaForRubric(rubric, includeTogether = true) {
   return rubric.criteria.filter((criterion) => includeTogether || criterion.domain !== 'together');
+}
+
+export function rubricActivities(rubrics = RUBRICS) {
+  const activities = new Map();
+  rubrics.forEach((rubric) => {
+    const activityId = rubric.activityId || rubric.id;
+    if (!activities.has(activityId)) activities.set(activityId, { id: activityId, title: rubric.title, form: rubric.form, learningLine: rubric.learningLine, description: rubric.description, variants: [] });
+    activities.get(activityId).variants.push(rubric);
+  });
+  return [...activities.values()];
+}
+
+export function rubricsForCluster(cluster, rubrics = RUBRICS) {
+  return rubricActivities(rubrics).flatMap((activity) => {
+    const exact = activity.variants.filter((rubric) => rubric.cluster === cluster);
+    return exact.length ? exact : activity.variants.filter((rubric) => !rubric.cluster);
+  });
 }
 
 export const RUBRIC = RUBRICS[0].criteria;

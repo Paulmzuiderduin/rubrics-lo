@@ -48,6 +48,13 @@ test('resultaten kunnen per leerlijn worden bekeken', () => {
 test('rubrics en resultaten ondersteunen een variabel aantal beoordelingsrijen', () => {
   assert.match(appSource, /rubric\.criteria\.filter\(\(criterion\) => assessment\.effective\[criterion\.key\]\)/);
   assert.doesNotMatch(appSource, /assessment\.effective\.movement/);
-  assert.match(appSource, /Kies eerst een HAN-leerlijn en daarna een sport of spel/);
+  assert.match(appSource, /Kies eerst een HAN-leerlijn, daarna een sport of spel en vervolgens de passende bouw/);
   assert.match(appSource, /className="learning-line-rubrics"/);
+});
+
+test('rubricbibliotheek ondersteunt bouwvarianten per sport of spel', () => {
+  assert.match(appSource, /const \[selectedActivityId, setSelectedActivityId\] = useState\(null\)/);
+  assert.match(appSource, /Onderbouw · Middenbouw · Bovenbouw/);
+  assert.match(appSource, /CLASS_CLUSTERS\.map\(\(cluster\)/);
+  assert.match(appSource, /rubricsForCluster\(classItem\?\.cluster\)/);
 });
