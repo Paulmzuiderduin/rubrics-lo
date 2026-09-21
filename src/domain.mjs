@@ -144,6 +144,15 @@ export function latestAssessmentInRange(assessments, classId, studentId, rubricI
   return assessments.filter((item) => item.classId === classId && item.studentId === studentId && (item.rubricId || 'kanjam') === rubricId && (!startDate || item.submittedAt.slice(0, 10) >= startDate) && (!endDate || item.submittedAt.slice(0, 10) <= endDate)).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))[0] || null;
 }
 
+export function upsertAssessment(assessments, assessment) {
+  const existing = assessments.find((item) => item.classId === assessment.classId
+    && item.studentId === assessment.studentId
+    && (item.rubricId || 'kanjam') === assessment.rubricId
+    && item.occurrenceKey === assessment.occurrenceKey);
+  if (!existing) return [...assessments, assessment];
+  return assessments.map((item) => item.id === existing.id ? { ...assessment, id: existing.id } : item);
+}
+
 export function dateRangeForFilter(data, filter) {
   if (filter.type === 'custom') return { start: filter.start, end: filter.end, label: 'Aangepaste periode' };
   if (filter.type === 'period') {

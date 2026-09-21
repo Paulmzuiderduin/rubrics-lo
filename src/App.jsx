@@ -6,7 +6,7 @@ import {
   Pencil, Plus, Printer, Settings2, Trash2, Users, X,
 } from 'lucide-react';
 import { CLASS_CLUSTERS, LEARNING_LINES, LEVELS, rubricActivities, rubricsForCluster, RUBRICS } from './data.js';
-import { addDays, dateRangeForFilter, appendLessonSession, deleteClassData, latestAssessmentInRange, localDateKey, nextAvailableOccurrences, occurrencesForWeek, periodLabel, periodTimes, relocateSeriesOccurrence, removeSeriesOccurrence, startOfWeek, WEEKDAYS } from './domain.mjs';
+import { addDays, dateRangeForFilter, appendLessonSession, deleteClassData, latestAssessmentInRange, localDateKey, nextAvailableOccurrences, occurrencesForWeek, periodLabel, periodTimes, relocateSeriesOccurrence, removeSeriesOccurrence, startOfWeek, upsertAssessment, WEEKDAYS } from './domain.mjs';
 import { useWorkspace } from './useWorkspace.js';
 import { supabase } from './supabase.js';
 import { clearSessionLock, loadSessionLock, saveSessionLock } from './sessionLock.mjs';
@@ -240,7 +240,10 @@ function WorkspaceApp({ data, setData, user, onSignOut, sync, syncError }) {
   function beginSession(occurrence, series) { const result = appendLessonSession(data, series, occurrence); const nextActive = { occurrence, series, mode: result.mode, sessionId: result.session.id }; setData(result.data); saveSessionLock(localStorage, user.id, nextActive); setActiveSession(nextActive); }
   function endSession() { setData((current) => ({ ...current, lessonSessions: current.lessonSessions.map((item) => item.id === activeSession.sessionId ? { ...item, endedAt: new Date().toISOString() } : item) })); clearSessionLock(localStorage); setActiveSession(null); }
   async function unlockTeacherMode(password) { const { error } = await supabase.auth.signInWithPassword({ email: user.email, password }); if (error) return 'Het wachtwoord is niet juist.'; endSession(); return ''; }
-  function submitAssessment(studentId, answers) { setData((current) => ({ ...current, assessments: [...current.assessments, { id: `assessment-${Date.now()}`, classId: activeSession.series.classId, studentId, rubricId: activeSession.series.rubricId, seriesId: activeSession.series.id, occurrenceKey: activeSession.occurrence.key, submittedAt: new Date().toISOString(), self: answers, effective: { ...answers }, adjusted: {} }] })); }
+  function submitAssessment(studentId, answers) {
+    const assessment = { id: `assessment-${Date.now()}`, classId: activeSession.series.classId, studentId, rubricId: activeSession.series.rubricId, seriesId: activeSession.series.id, occurrenceKey: activeSession.occurrence.key, submittedAt: new Date().toISOString(), self: answers, effective: { ...answers }, adjusted: {} };
+    setData((current) => ({ ...current, assessments: upsertAssessment(current.assessments, assessment) }));
+  }
   function saveReview(effective) { setData((current) => ({ ...current, assessments: current.assessments.map((item) => item.id === review.assessment.id ? { ...item, effective, adjusted: Object.fromEntries(Object.keys(effective).map((key) => [key, effective[key] !== item.self[key]])) } : item) })); setReview(null); }
   if (activeSession) { const classItem = data.classes.find((item) => item.id === activeSession.series.classId); return <SessionScreen rubric={rubricById(activeSession.series.rubricId)} classItem={classItem} series={activeSession.series} mode={activeSession.mode} onSubmit={submitAssessment} onExit={unlockTeacherMode} />; }
   let content;

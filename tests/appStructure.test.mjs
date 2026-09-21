@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const appSource = await readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');
+const rubricViewsSource = await readFile(new URL('../src/RubricViews.jsx', import.meta.url), 'utf8');
 
 test('rapportpagina bevat de periodefilter en periodebeheer-componenten', () => {
   assert.match(appSource, /function PeriodFilter\s*\(/);
@@ -36,6 +37,13 @@ test('docent kan de zelfbeoordeling apart bekijken en de effectieve beoordeling 
   assert.match(appSource, /Geldende beoordeling · alleen aanpassen indien nodig/);
   assert.match(appSource, /Aanpassing opslaan/);
   assert.match(appSource, /effective: \{ \.\.\.answers \}/);
+});
+
+test('leerling vult alle rubricrijen op één scherm in en dient eenmaal in', () => {
+  assert.match(rubricViewsSource, /criteria\.map\(\(criterion\) => <LevelPicker/);
+  assert.match(rubricViewsSource, /Beoordeling indienen/);
+  assert.match(rubricViewsSource, /disabled=\{!complete\}/);
+  assert.doesNotMatch(rubricViewsSource, /setStep\(/);
 });
 
 test('resultaten kunnen per leerlijn worden bekeken', () => {

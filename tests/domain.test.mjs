@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createInitialData } from '../src/data.js';
-import { appendLessonSession, dateRangeForFilter, deleteClassData, latestAssessmentInRange, nextAvailableOccurrences, occurrencesForWeek, parseDateKey, relocateSeriesOccurrence, removeSeriesOccurrence } from '../src/domain.mjs';
+import { appendLessonSession, dateRangeForFilter, deleteClassData, latestAssessmentInRange, nextAvailableOccurrences, occurrencesForWeek, parseDateKey, relocateSeriesOccurrence, removeSeriesOccurrence, upsertAssessment } from '../src/domain.mjs';
 
 test('weekagenda bevat meerdere vaste gymmomenten met lesuren', () => {
   const data = createInitialData();
@@ -30,6 +30,34 @@ test('rapport gebruikt de meest recente beoordeling binnen de gekozen periode', 
   data.assessments.push({ ...data.assessments[0], id: 'new', submittedAt: '2026-10-02T10:00:00Z', effective: { movement: 'purple' } });
   assert.equal(latestAssessmentInRange(data.assessments, 'class-2a', 's-amine', 'kanjam', '2026-09-01', '2026-10-31').effective.movement, 'purple');
   assert.equal(latestAssessmentInRange(data.assessments, 'class-2a', 's-amine', 'kanjam', '2026-09-01', '2026-09-30').effective.movement, 'red');
+});
+
+test('een tweede inzending op hetzelfde beoordelingsmoment vervangt de eerste', () => {
+  const data = createInitialData();
+  const original = data.assessments[0];
+  const replacement = {
+    ...original,
+    id: 'nieuwe-id',
+    submittedAt: '2026-09-15T09:00:00.000Z',
+    self: { movement: 'purple', together: 'red' },
+    effective: { movement: 'purple', together: 'red' },
+    adjusted: {},
+  };
+  const updated = upsertAssessment(data.assessments, replacement);
+  assert.equal(updated.length, data.assessments.length);
+  const stored = updated.find((item) => item.id === original.id);
+  assert.deepEqual(stored.self, replacement.self);
+  assert.deepEqual(stored.effective, replacement.self);
+  assert.deepEqual(stored.adjusted, {});
+  assert.equal(stored.submittedAt, replacement.submittedAt);
+});
+
+test('een beoordeling voor een ander lesmoment blijft apart bewaard', () => {
+  const data = createInitialData();
+  const original = data.assessments[0];
+  const nextLesson = { ...original, id: 'volgende-les', occurrenceKey: '2026-09-22|slot-2a-tue' };
+  const updated = upsertAssessment(data.assessments, nextLesson);
+  assert.equal(updated.length, data.assessments.length + 1);
 });
 
 test('schoolperiode en aangepaste periode leveren hun eigen datumbereik', () => {

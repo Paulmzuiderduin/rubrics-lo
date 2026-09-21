@@ -285,6 +285,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .name-list button { width: 100%; border: 0; border-bottom: 1px solid #e0e6ea; background: #fff; color: #19384f; padding: 12px; text-align: left; }
 .name-list button:hover { background: #f2f6f8; }
 .assessment-shell { padding: 22px 28px; }
+.assessment-all-criteria { padding-bottom: 110px; }
+.assessment-intro { width: min(1280px, 100%); margin: 0 auto 24px; }
+.assessment-intro h1 { margin: 4px 0 6px; font-size: 28px; }
+.assessment-intro > p:last-child { color: var(--muted); }
+.assessment-criteria-list { display: grid; gap: 32px; }
+.assessment-criteria-list .assessment-rubric + .assessment-rubric { border-top: 1px solid #cbd6dd; padding-top: 30px; }
 .assessment-rubric { width: min(1280px, 100%); margin: auto; }
 .assessment-rubric > header { margin-bottom: 16px; }
 .assessment-rubric > header p { margin-bottom: 5px; color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
@@ -300,7 +306,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .level-detail > div { background: var(--level-color); }
 .level-detail > p { display: grid; gap: 5px; margin: 0; color: #425c70; font-size: 14px; line-height: 1.45; }
 .level-detail small { display: grid; gap: 2px; color: #526a7b; }
-.student-actions { width: min(1280px, 100%); margin: 17px auto 0; display: flex; justify-content: space-between; align-items: center; }
+.student-actions { position: sticky; bottom: 0; z-index: 5; width: min(1280px, 100%); margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; border: 1px solid #cbd6dd; background: #fff; padding: 13px 16px; box-shadow: 0 -6px 18px rgba(18, 43, 66, .08); }
 .student-actions span { color: var(--muted); font-size: 13px; }
 .student-success { min-height: 100vh; display: grid; place-items: center; background: #f4f6f8; text-align: center; }
 .student-success > div > span { width: 64px; height: 64px; display: grid; place-items: center; margin: auto; border-radius: 50%; background: #e3f1e9; color: #2f7d56; }
