@@ -36,6 +36,19 @@ export function guessMapping(headers) {
   return { name, firstName: find('voornaam', 'first'), lastName: find('achternaam', 'surname', 'last'), className: find('klas', 'class', 'groep') };
 }
 
+export function compareStudentNames(a, b) {
+  const aName = String(typeof a === 'string' ? a : a?.name || '').trim();
+  const bName = String(typeof b === 'string' ? b : b?.name || '').trim();
+  const aParts = aName.split(/\s+/);
+  const bParts = bName.split(/\s+/);
+  const lastNameOrder = aParts.at(-1).localeCompare(bParts.at(-1), 'nl', { sensitivity: 'base' });
+  return lastNameOrder || aName.localeCompare(bName, 'nl', { sensitivity: 'base' });
+}
+
+export function sortStudentsByLastName(students) {
+  return [...students].sort(compareStudentNames);
+}
+
 export function studentsFromRows(rows, mapping) {
   const seen = new Set();
   return rows.map((row, index) => {
@@ -44,7 +57,7 @@ export function studentsFromRows(rows, mapping) {
     if (!name || seen.has(name.toLocaleLowerCase('nl'))) return null;
     seen.add(name.toLocaleLowerCase('nl'));
     return { id: `student-${Date.now()}-${index}`, name };
-  }).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name, 'nl'));
+  }).filter(Boolean).sort(compareStudentNames);
 }
 
 export function latestAssessment(assessments, classId, studentId) {

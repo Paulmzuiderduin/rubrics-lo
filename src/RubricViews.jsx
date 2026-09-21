@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowLeft, Check, Image, Search, Video, X } from 'lucide-react';
 import { criteriaForRubric, LEVELS } from './data.js';
+import { sortStudentsByLastName } from './utils.mjs';
 
 export const levelFor = (key) => LEVELS.find((level) => level.key === key);
 
@@ -49,7 +50,7 @@ export function SessionScreen({ rubric, classItem, series, mode, onSubmit, onExi
   const [doneName, setDoneName] = useState('');
   const [exitConfirm, setExitConfirm] = useState(false);
   const student = classItem.students.find((item) => item.id === studentId);
-  const students = useMemo(() => classItem.students.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())).sort((a, b) => a.name.localeCompare(b.name, 'nl')), [classItem.students, search]);
+  const students = useMemo(() => sortStudentsByLastName(classItem.students.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))), [classItem.students, search]);
   function reset() { setStudentId(''); setSearch(''); setAnswers({}); setDoneName(''); }
   function finish() { onSubmit(studentId, answers); setDoneName(student.name.split(' ')[0]); window.setTimeout(reset, 1800); }
 
