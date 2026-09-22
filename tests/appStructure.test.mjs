@@ -58,6 +58,13 @@ test('resultaten kunnen per leerlijn worden bekeken', () => {
   assert.doesNotMatch(appSource, /Oorspronkelijke leerlingbeoordeling/);
 });
 
+test('een testbeoordeling kan vanuit Resultaten worden verwijderd', () => {
+  assert.match(appSource, /function DeleteAssessmentModal\s*\(/);
+  assert.match(appSource, /Beoordeling verwijderen/);
+  assert.match(appSource, /assessments\.filter\(\(item\) => item\.id !== modal\.assessment\.id\)/);
+  assert.match(appSource, /type: 'deleteAssessment'/);
+});
+
 test('rubrics en resultaten ondersteunen een variabel aantal beoordelingsrijen', () => {
   assert.match(appSource, /rubric\.criteria\.filter\(\(criterion\) => assessment\.effective\[criterion\.key\]\)/);
   assert.doesNotMatch(appSource, /assessment\.effective\.movement/);
