@@ -301,10 +301,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .assessment-rubric > header h2 { margin-bottom: 2px; font-size: 18px; line-height: 1.1; }
 .assessment-rubric > header span { color: var(--muted); font-size: 11px; line-height: 1.25; }
 .level-grid { min-height: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.level-option { position: relative; min-height: 0; height: 100%; border: 1px solid #c4d0d8; border-radius: 0; background: #fff; color: #1a374d; padding: 0 9px 7px; text-align: left; }
+.level-option { position: relative; min-height: 0; height: 100%; display: grid; grid-template-rows: auto 1fr; align-content: start; align-items: start; border: 1px solid #c4d0d8; border-radius: 0; background: #fff; color: #1a374d; padding: 0 9px 7px; text-align: left; vertical-align: top; }
 .level-option.selected { outline: 3px solid var(--level-color); outline-offset: 1px; }
 .level-option svg { position: absolute; top: 8px; right: 7px; color: #fff; }
-.level-name { display: block; margin: 0 -9px 6px; padding: 7px 9px; background: var(--level-color); color: #fff; font-size: 12px; font-weight: 800; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.level-name { display: block; width: calc(100% + 18px); margin: 0 -9px 6px; padding: 7px 9px; background: var(--level-color); color: #fff; font-size: 12px; font-weight: 800; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .level-summary { display: block; color: #526878; font-size: clamp(10px, .82vw, 12px); line-height: 1.25; }
 .level-detail { min-height: 118px; display: grid; grid-template-columns: 7px 1fr; gap: 15px; margin-top: 16px; border: 1px solid #c9d4dc; background: #fff; padding: 16px; }
 .level-detail > div { background: var(--level-color); }
