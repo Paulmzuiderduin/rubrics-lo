@@ -94,6 +94,11 @@ test('iedere selecteerbare rubric is gepubliceerd in de databasecatalogus', asyn
   }
 });
 
+test('verschijningsvorm is geen eigenschap van een rubric in de database', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260922160952_remove_rubric_activity_form.sql', import.meta.url), 'utf8');
+  assert.match(sql, /alter table public\.rubrics\s+drop column if exists activity_form/i);
+});
+
 test('snapshot-RPC bindt eigenaarschap server-side en is niet beschikbaar voor anon', async () => {
   const sql = await readFile(new URL('../supabase/migrations/20260919102617_migrate_workspace_snapshots.sql', import.meta.url), 'utf8');
   assert.match(sql, /caller_id uuid := \(select auth\.uid\(\)\)/i);

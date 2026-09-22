@@ -35,6 +35,7 @@ test('rubricbibliotheek toont de HAN-leerlijnen en deelt rubrics per leerlijn in
   ]);
   assert.equal(RUBRICS.find((item) => item.id === 'kanjam')?.learningLine, 'target-games');
   assert.equal(RUBRICS.find((item) => item.id === 'speerwerpen')?.learningLine, 'throwing');
+  assert.ok(RUBRICS.every((item) => !Object.hasOwn(item, 'form')));
 });
 
 test('een rubric ondersteunt meerdere rijen binnen Beter bewegen', () => {

@@ -67,6 +67,14 @@ test('rubricbibliotheek ondersteunt bouwvarianten per sport of spel', () => {
   assert.match(appSource, /rubricsForCluster\(classItem\?\.cluster\)/);
 });
 
+test('rubrics tonen hun leerlijn en geen gekoppelde verschijningsvorm', () => {
+  assert.match(appSource, /<span>Leerlijn<\/span>/);
+  assert.match(appSource, /rubric\.learningLine/);
+  assert.doesNotMatch(appSource, /Verschijningsvorm/);
+  assert.doesNotMatch(appSource, /rubric\.form|activity\.form/);
+  assert.doesNotMatch(rubricViewsSource, /rubric\.form/);
+});
+
 test('de huidige pagina wordt in de URL bewaard voor verversen', () => {
   assert.match(appSource, /readWorkspaceRoute\(window\.location\.search, data\)/);
   assert.match(appSource, /writeWorkspaceSearch\(url\.search/);

@@ -40,7 +40,6 @@ export const RUBRICS = [{
   id: 'kanjam',
   activityId: 'kanjam',
   title: 'KanJam',
-  form: 'Spel',
   learningLine: 'target-games',
   cluster: null,
   description: 'Gericht werpen, tactiek afspreken en samen spelen.',
@@ -71,7 +70,6 @@ export const RUBRICS = [{
   id: 'speerwerpen',
   activityId: 'speerwerpen',
   title: 'Speerwerpen',
-  form: 'Atletiek',
   learningLine: 'throwing',
   cluster: null,
   description: 'Aanloop en afworp verbinden, de speer gericht laten landen en veilig samenwerken.',
@@ -118,7 +116,7 @@ export function rubricActivities(rubrics = RUBRICS) {
   const activities = new Map();
   rubrics.forEach((rubric) => {
     const activityId = rubric.activityId || rubric.id;
-    if (!activities.has(activityId)) activities.set(activityId, { id: activityId, title: rubric.title, form: rubric.form, learningLine: rubric.learningLine, description: rubric.description, variants: [] });
+    if (!activities.has(activityId)) activities.set(activityId, { id: activityId, title: rubric.title, learningLine: rubric.learningLine, description: rubric.description, variants: [] });
     activities.get(activityId).variants.push(rubric);
   });
   return [...activities.values()];

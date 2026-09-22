@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowLeft, Check, Image, Search, Video, X } from 'lucide-react';
-import { criteriaForRubric, LEVELS } from './data.js';
+import { criteriaForRubric, LEARNING_LINES, LEVELS } from './data.js';
 import { sortStudentsByLastName } from './utils.mjs';
 
 export const levelFor = (key) => LEVELS.find((level) => level.key === key);
@@ -22,7 +22,8 @@ export function RubricMatrix({ rubric, activeKeys, compact = false }) {
 
 export function PresentationMode({ rubric, activeKeys, includeTogether = true, sessionLabel }) {
   const visibleKeys = activeKeys || criteriaForRubric(rubric, includeTogether).map((criterion) => criterion.key);
-  return <main className="presentation-mode"><header><div><p>Rubrics LO</p><h1>{rubric.title}</h1></div><div><strong>{rubric.form}</strong>{sessionLabel && <span>{sessionLabel}</span>}</div></header><RubricMatrix rubric={rubric} activeKeys={visibleKeys} /><MediaPlaceholders /></main>;
+  const learningLine = LEARNING_LINES.find((item) => item.key === rubric.learningLine);
+  return <main className="presentation-mode"><header><div><p>Rubrics LO</p><h1>{rubric.title}</h1></div><div><strong>{learningLine?.name}</strong>{sessionLabel && <span>{sessionLabel}</span>}</div></header><RubricMatrix rubric={rubric} activeKeys={visibleKeys} /><MediaPlaceholders /></main>;
 }
 
 function ExitConfirm({ onCancel, onConfirm }) {
