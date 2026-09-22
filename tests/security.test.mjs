@@ -95,7 +95,7 @@ test('iedere selecteerbare rubric is gepubliceerd in de databasecatalogus', asyn
 });
 
 test('verschijningsvorm is geen eigenschap van een rubric in de database', async () => {
-  const sql = await readFile(new URL('../supabase/migrations/20260922160952_remove_rubric_activity_form.sql', import.meta.url), 'utf8');
+  const sql = await readFile(new URL('../supabase/migrations/20260922201202_remove_rubric_activity_form.sql', import.meta.url), 'utf8');
   assert.match(sql, /alter table public\.rubrics\s+drop column if exists activity_form/i);
 });
 
@@ -130,7 +130,7 @@ test('private schrijfhelper accepteert geen eigenaar uit de browser', async () =
 });
 
 test('gewijzigde werkruimte-opslag gebruikt compare-and-swap en behoudt de rollback-RPC tijdens de cutover', async () => {
-  const sql = await readFile(new URL('../supabase/migrations/20260922194136_protect_workspace_snapshot_writes.sql', import.meta.url), 'utf8');
+  const sql = await readFile(new URL('../supabase/migrations/20260922202111_protect_workspace_snapshot_writes.sql', import.meta.url), 'utf8');
   assert.match(sql, /create function private\.apply_current_workspace_changes\([\s\S]*expected_updated_at timestamptz/i);
   assert.match(sql, /current_updated_at is distinct from expected_updated_at/i);
   assert.match(sql, /create function public\.apply_personal_workspace_changes\([\s\S]*security invoker/i);
