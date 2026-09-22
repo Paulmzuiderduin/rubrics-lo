@@ -63,27 +63,33 @@ test('iedere selecteerbare rubric is gepubliceerd in de databasecatalogus', asyn
   const directory = new URL('../supabase/migrations/', import.meta.url);
   const files = (await readdir(directory)).filter((name) => name.endsWith('.sql')).sort();
   const migrations = await Promise.all(files.map((name) => readFile(new URL(name, directory), 'utf8')));
-  const sql = migrations.join('\n');
-
   for (const rubric of RUBRICS) {
     const rubricId = escapeRegExp(rubric.id);
+    const publication = migrations.find((sql) => new RegExp(
+      `insert into public\\.rubrics[\\s\\S]*?values\\s*\\(\\s*'${rubricId}'`,
+      'i',
+    ).test(sql));
+    assert.ok(publication, `${rubric.title} ontbreekt in public.rubrics`);
     assert.match(
-      sql,
-      new RegExp(`insert into public\\.rubrics[\\s\\S]*?values\\s*\\(\\s*'${rubricId}'`, 'i'),
-      `${rubric.title} ontbreekt in public.rubrics`,
-    );
-    assert.match(
-      sql,
+      publication,
       new RegExp(`insert into public\\.rubric_versions[\\s\\S]*?values\\s*\\(\\s*'${rubricId}'`, 'i'),
       `${rubric.title} heeft geen gepubliceerde databaseversie`,
     );
 
     for (const criterion of rubric.criteria) {
       assert.match(
-        sql,
+        publication,
         new RegExp(`'${escapeRegExp(criterion.key)}'`, 'i'),
         `${rubric.title}: beoordelingsrij ${criterion.key} ontbreekt in de databasecatalogus`,
       );
+      for (const level of Object.values(criterion.levels)) {
+        for (const text of [level.summary, level.detail, level.next]) {
+          assert.ok(
+            publication.includes(text.replaceAll("'", "''")),
+            `${rubric.title}: niveau-inhoud van ${criterion.key} ontbreekt in de databasecatalogus`,
+          );
+        }
+      }
     }
   }
 });
