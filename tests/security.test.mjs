@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
+import { RUBRICS } from '../src/data.js';
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 test('browserbeleid staat alleen eigen bron en het Rubrics Supabase-project toe', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
@@ -52,6 +57,35 @@ test('productdata is relationeel en voorbereid op latere workspaceleden', async 
   assert.match(sql, /create table public\.rubric_domains/i);
   assert.match(sql, /create table public\.rubric_levels/i);
   assert.doesNotMatch(sql, /create table public\.schools/i);
+});
+
+test('iedere selecteerbare rubric is gepubliceerd in de databasecatalogus', async () => {
+  const directory = new URL('../supabase/migrations/', import.meta.url);
+  const files = (await readdir(directory)).filter((name) => name.endsWith('.sql')).sort();
+  const migrations = await Promise.all(files.map((name) => readFile(new URL(name, directory), 'utf8')));
+  const sql = migrations.join('\n');
+
+  for (const rubric of RUBRICS) {
+    const rubricId = escapeRegExp(rubric.id);
+    assert.match(
+      sql,
+      new RegExp(`insert into public\\.rubrics[\\s\\S]*?values\\s*\\(\\s*'${rubricId}'`, 'i'),
+      `${rubric.title} ontbreekt in public.rubrics`,
+    );
+    assert.match(
+      sql,
+      new RegExp(`insert into public\\.rubric_versions[\\s\\S]*?values\\s*\\(\\s*'${rubricId}'`, 'i'),
+      `${rubric.title} heeft geen gepubliceerde databaseversie`,
+    );
+
+    for (const criterion of rubric.criteria) {
+      assert.match(
+        sql,
+        new RegExp(`'${escapeRegExp(criterion.key)}'`, 'i'),
+        `${rubric.title}: beoordelingsrij ${criterion.key} ontbreekt in de databasecatalogus`,
+      );
+    }
+  }
 });
 
 test('snapshot-RPC bindt eigenaarschap server-side en is niet beschikbaar voor anon', async () => {
