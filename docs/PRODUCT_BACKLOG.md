@@ -4,12 +4,12 @@ Priorities reflect the pilot's most important risks and workflows. Keep this fil
 
 ## P0 — pilot safety and trust
 
-- [x] Implement targeted, transactional entity changes so one small edit does not rewrite every class, lesson, and assessment (migration still needs deployment and runtime verification).
-- [x] Reject a full-workspace save when it is based on an older remote version.
+- [x] Implement targeted, transactional entity changes so one small edit does not rewrite every class, lesson, and assessment (migration and client are deployed; real-account runtime check remains).
+- [ ] Remove the legacy full-workspace save RPC after cutover and verify stale-tab conflicts using two sessions.
 - [x] Keep failed saves in the open tab, warn before leaving, offer retry, and offer an explicit local download of unsaved data.
 - [x] Replace raw database errors in the UI with privacy-conscious messages.
 - [x] Add a short undo window after deleting a class or assessment.
-- [ ] Apply and verify the compare-and-swap migration in the connected Supabase project.
+- [x] Apply the compare-and-swap migration and verify live function grants; runtime behavior still needs real-account verification.
 - [ ] Verify isolation and save-conflict behavior with two real test accounts, using fictional data only.
 - [ ] Confirm the Supabase backup plan, latest backup timestamp, and restore procedure; perform a restore drill in a separate project before real pupil data is allowed.
 - [ ] Agree and publish retention/deletion periods with the school/controller before storing real pupil data.

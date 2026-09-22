@@ -20,13 +20,15 @@ Keep screenshots or notes of the expected/actual results, but redact names, emai
 ## Migration and authorization prerequisites
 
 - The `protect_workspace_snapshot_writes` migration is now applied to the connected Rubrics Supabase project. It adds the new compare-and-swap writer while retaining the old save RPC for a rollback window.
-- The deployed frontend still needs to be switched to the new writer before running the stale-tab conflict check above. After the new app is live and verified, retire the old whole-snapshot writer in a separate cleanup migration.
+- The matching frontend has been pushed and the GitHub Pages workflow completed successfully. The live-account save and stale-tab conflict flows still need a real-user check. After those pass, retire the old whole-snapshot writer in a separate cleanup migration.
 - Never run a production database reset to apply it. Confirm the project reference before any further live migration.
 - The save RPC must derive the workspace owner from the authenticated user's `auth.uid()`; never add a caller-provided owner ID.
 - RLS is only verified after the real-account isolation check. A hidden UI control is not an authorization test.
 - Keep the Supabase service-role/secret key out of the browser, Git, screenshots, shell history, and shared test notes.
 
 The live project check confirmed that the new public RPC is `SECURITY INVOKER`, is executable by `authenticated` but not `anon`, and that the internal row-patch helper cannot be called directly by `authenticated`. The existing legacy writer remains callable during cutover and must be removed after client verification.
+
+The Supabase project is on the Free plan and the dashboard currently shows no managed backup. Leaked-password protection is also disabled; Supabase documents that feature as Pro-plan-and-above, so enabling it would require a plan change. No plan upgrade or paid add-on has been made.
 
 ## Backups and recovery
 
