@@ -128,3 +128,12 @@ test('private schrijfhelper accepteert geen eigenaar uit de browser', async () =
   assert.doesNotMatch(sql, /replace_current_workspace_snapshot\([^)]*owner/i);
   assert.match(sql, /create or replace function public\.save_personal_workspace_snapshot\(payload jsonb\)[\s\S]*security invoker/i);
 });
+
+test('gewijzigde werkruimte-opslag gebruikt compare-and-swap en behoudt de rollback-RPC tijdens de cutover', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260922194136_protect_workspace_snapshot_writes.sql', import.meta.url), 'utf8');
+  assert.match(sql, /create function private\.apply_current_workspace_changes\([\s\S]*expected_updated_at timestamptz/i);
+  assert.match(sql, /current_updated_at is distinct from expected_updated_at/i);
+  assert.match(sql, /create function public\.apply_personal_workspace_changes\([\s\S]*security invoker/i);
+  assert.match(sql, /grant execute on function public\.apply_personal_workspace_changes\(jsonb, timestamptz\)[\s\S]*to authenticated/i);
+  assert.doesNotMatch(sql, /drop function public\.save_personal_workspace_snapshot/i);
+});

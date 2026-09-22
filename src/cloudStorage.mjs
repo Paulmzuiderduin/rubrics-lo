@@ -1,5 +1,5 @@
 export const LOAD_WORKSPACE_RPC = 'load_personal_workspace_snapshot';
-export const SAVE_WORKSPACE_RPC = 'save_personal_workspace_snapshot';
+export const APPLY_WORKSPACE_CHANGES_RPC = 'apply_personal_workspace_changes';
 export const WORKSPACE_SCHEMA_VERSION = 3;
 
 export function workspacePayload(data) {
@@ -20,10 +20,9 @@ export async function loadRemoteWorkspace(client) {
   };
 }
 
-export async function saveRemoteWorkspace(client, data) {
-  const payload = workspacePayload(data);
+export async function saveRemoteWorkspace(client, changes, expectedUpdatedAt) {
   const { data: saved, error } = await client
-    .rpc(SAVE_WORKSPACE_RPC, { payload })
+    .rpc(APPLY_WORKSPACE_CHANGES_RPC, { changes, expected_updated_at: expectedUpdatedAt ?? null })
     .single();
 
   if (error) throw error;

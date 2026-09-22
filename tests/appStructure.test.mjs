@@ -48,7 +48,7 @@ test('leerling vult alle rubricrijen op één scherm in en dient eenmaal in', ()
   assert.match(stylesSource, /\.assessment-all-criteria\s*\{[^}]*height:\s*calc\(100vh - 62px\)/s);
   assert.match(stylesSource, /\.assessment-all-criteria\s*\{[^}]*overflow:\s*hidden/s);
   assert.match(stylesSource, /\.assessment-rubric\s*\{[^}]*grid-template-columns:\s*190px minmax\(0, 1fr\)/s);
-  assert.match(stylesSource, /\.level-option\s*\{[^}]*grid-template-rows:\s*auto 1fr[^}]*align-content:\s*start/s);
+  assert.match(stylesSource, /\.level-option\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column[^}]*justify-content:\s*flex-start/s);
   assert.doesNotMatch(rubricViewsSource, /className="level-detail"/);
 });
 
@@ -62,7 +62,7 @@ test('resultaten kunnen per leerlijn worden bekeken', () => {
 test('een testbeoordeling kan vanuit Resultaten worden verwijderd', () => {
   assert.match(appSource, /function DeleteAssessmentModal\s*\(/);
   assert.match(appSource, /Beoordeling verwijderen/);
-  assert.match(appSource, /assessments\.filter\(\(item\) => item\.id !== modal\.assessment\.id\)/);
+  assert.match(appSource, /assessments\.filter\(\(item\) => item\.id !== deleted\.id\)/);
   assert.match(appSource, /type: 'deleteAssessment'/);
 });
 

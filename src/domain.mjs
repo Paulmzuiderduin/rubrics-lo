@@ -176,3 +176,21 @@ export function deleteClassData(data, classId) {
     assessments: data.assessments.filter((item) => item.classId !== classId),
   };
 }
+
+export function restoreClassData(current, previous, classId) {
+  const previousSeries = previous.lessonSeries.filter((item) => item.classId === classId);
+  const seriesIds = new Set(previousSeries.map((item) => item.id));
+  const occurrenceKeys = new Set(previousSeries.flatMap((item) => item.occurrences.map((entry) => entry.key)));
+  const mergeById = (active, restored) => [...active, ...restored.filter((item) => !active.some((existing) => existing.id === item.id))];
+  const restoredExceptions = previous.agendaExceptions.filter((item) => occurrenceKeys.has(item.occurrenceKey));
+  const exceptionKeys = new Set(current.agendaExceptions.map((item) => item.occurrenceKey));
+  return {
+    ...current,
+    classes: mergeById(current.classes, previous.classes.filter((item) => item.id === classId)),
+    gymScheduleSlots: mergeById(current.gymScheduleSlots, previous.gymScheduleSlots.filter((item) => item.classId === classId)),
+    lessonSeries: mergeById(current.lessonSeries, previousSeries),
+    lessonSessions: mergeById(current.lessonSessions, previous.lessonSessions.filter((item) => seriesIds.has(item.seriesId))),
+    agendaExceptions: [...current.agendaExceptions, ...restoredExceptions.filter((item) => !exceptionKeys.has(item.occurrenceKey))],
+    assessments: mergeById(current.assessments, previous.assessments.filter((item) => item.classId === classId)),
+  };
+}

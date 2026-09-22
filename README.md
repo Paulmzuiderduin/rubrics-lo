@@ -23,7 +23,7 @@ De pilot gebruikt een relationeel datamodel. Iedere docent krijgt automatisch é
 
 `workspace_members` bevat al rollen voor eigenaar, beheerder, docent en lezer. De huidige interface maakt uitsluitend een persoonlijke werkomgeving met één eigenaar en biedt bewust nog geen deel- of teamfuncties. Later kunnen scholen, teams en gedeeld eigenaarschap daardoor worden toegevoegd zonder de onderwijsgegevens opnieuw te modelleren.
 
-De frontend leest en schrijft de tijdelijke volledige clientweergave via twee afgeschermde RPC's. De eigenaar komt daarbij uitsluitend uit `auth.uid()` en kan niet vanuit de browser worden meegestuurd. De gegevens zelf worden niet als één JSON-document opgeslagen; de RPC vertaalt naar genormaliseerde rijen. Naarmate de productflows stabiliseren kunnen gerichte mutaties per entiteit deze tijdelijke snapshot-API vervangen.
+De frontend leest via een afgeschermde RPC een volledige clientweergave, maar schrijft alleen gewijzigde entiteiten via een tweede RPC. Die wijzigingen worden transactioneel als gerichte upserts/verwijderingen op de genormaliseerde tabellen toegepast; een enkele aanpassing wist of herschrijft dus niet alle klassen, lessen en beoordelingen. Iedere write bevat ook de laatst gelezen workspaceversie. De database weigert een stale write zodat een oudere browsertab geen nieuwere wijzigingen kan overschrijven. De eigenaar komt uitsluitend uit `auth.uid()` en kan niet vanuit de browser worden meegestuurd. De gegevens zelf worden niet als één JSON-document opgeslagen.
 
 Beveiliging:
 

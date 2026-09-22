@@ -301,10 +301,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .assessment-rubric > header h2 { margin-bottom: 2px; font-size: 18px; line-height: 1.1; }
 .assessment-rubric > header span { color: var(--muted); font-size: 11px; line-height: 1.25; }
 .level-grid { min-height: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.level-option { position: relative; min-height: 0; height: 100%; display: grid; grid-template-rows: auto 1fr; align-content: start; align-items: start; border: 1px solid #c4d0d8; border-radius: 0; background: #fff; color: #1a374d; padding: 0 9px 7px; text-align: left; vertical-align: top; }
+.level-option { position: relative; min-height: 0; height: 100%; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; border: 1px solid #c4d0d8; border-radius: 0; background: #fff; color: #1a374d; padding: 0 9px 7px; text-align: left; vertical-align: top; }
 .level-option.selected { outline: 3px solid var(--level-color); outline-offset: 1px; }
 .level-option svg { position: absolute; top: 8px; right: 7px; color: #fff; }
-.level-name { display: block; width: calc(100% + 18px); margin: 0 -9px 6px; padding: 7px 9px; background: var(--level-color); color: #fff; font-size: 12px; font-weight: 800; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.level-name { display: flex; align-items: center; flex: 0 0 auto; width: calc(100% + 18px); min-height: 32px; margin: 0 -9px 6px; padding: 7px 9px; background: var(--level-color); color: #fff; font-size: 12px; font-weight: 800; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .level-summary { display: block; color: #526878; font-size: clamp(10px, .82vw, 12px); line-height: 1.25; }
 .level-detail { min-height: 118px; display: grid; grid-template-columns: 7px 1fr; gap: 15px; margin-top: 16px; border: 1px solid #c9d4dc; background: #fff; padding: 16px; }
 .level-detail > div { background: var(--level-color); }
@@ -441,9 +441,17 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .workspace-gate > section > svg { margin-bottom: 18px; color: var(--blue); }
 .workspace-gate > section > div { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
 .sync-banner { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; border: 1px solid #d9a0a0; background: #fff4f4; color: #863737; padding: 11px 13px; font-size: 13px; }
-.sync-banner span { display: inline; }
+.sync-banner > span { flex: 1; }
+.sync-banner small { display: block; margin-top: 4px; color: #765454; font-size: 11px; }
+.sync-banner > div { display: flex; gap: 6px; flex-shrink: 0; }
+.sync-banner .secondary-button { min-height: 33px; padding: 6px 9px; font-size: 12px; }
+.undo-banner { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: -10px 0 18px; border: 1px solid #a8c9b5; background: #f0f8f3; color: #264e37; padding: 9px 12px; font-size: 13px; }
+.undo-banner .text-button { flex-shrink: 0; color: #1f6137; }
 
 @media (max-width: 880px) {
+  .sync-banner { align-items: flex-start; flex-wrap: wrap; }
+  .sync-banner > span { min-width: calc(100% - 32px); }
+  .sync-banner > div { margin-left: 26px; flex-wrap: wrap; }
   .auth-public-page { padding-block: 30px 48px; }
   .auth-public-shell { min-height: 0; grid-template-columns: 1fr; gap: 44px; }
   .auth-public-page .auth-card { order: -1; width: min(520px, 100%); margin-inline: auto; }
