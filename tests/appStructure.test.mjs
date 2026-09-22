@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const appSource = await readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');
 const rubricViewsSource = await readFile(new URL('../src/RubricViews.jsx', import.meta.url), 'utf8');
+const stylesSource = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
 
 test('rapportpagina bevat de periodefilter en periodebeheer-componenten', () => {
   assert.match(appSource, /function PeriodFilter\s*\(/);
@@ -44,6 +45,10 @@ test('leerling vult alle rubricrijen op één scherm in en dient eenmaal in', ()
   assert.match(rubricViewsSource, /Beoordeling indienen/);
   assert.match(rubricViewsSource, /disabled=\{!complete\}/);
   assert.doesNotMatch(rubricViewsSource, /setStep\(/);
+  assert.match(stylesSource, /\.assessment-all-criteria\s*\{[^}]*height:\s*calc\(100vh - 62px\)/s);
+  assert.match(stylesSource, /\.assessment-all-criteria\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(stylesSource, /\.assessment-rubric\s*\{[^}]*grid-template-columns:\s*190px minmax\(0, 1fr\)/s);
+  assert.doesNotMatch(rubricViewsSource, /className="level-detail"/);
 });
 
 test('resultaten kunnen per leerlijn worden bekeken', () => {

@@ -38,8 +38,7 @@ function ExitConfirm({ onCancel, onConfirm }) {
 }
 
 function LevelPicker({ criterion, value, onChange }) {
-  const selected = value && criterion.levels[value];
-  return <section className="assessment-rubric"><header><p>{criterion.domainLabel || 'Waar sta je nu?'}</p><h2>{criterion.title}</h2><span>{criterion.short}</span></header><div className="level-grid">{LEVELS.map((level) => <button key={level.key} className={value === level.key ? 'level-option selected' : 'level-option'} style={{ '--level-color': level.color }} onClick={() => onChange(level.key)}><span className="level-name">{level.name}</span><span className="level-summary">{criterion.levels[level.key].summary}</span>{value === level.key && <Check size={18} />}</button>)}</div>{selected && <div className="level-detail" style={{ '--level-color': levelFor(value).color }}><div /><p><strong>{levelFor(value).name}</strong>{selected.detail}<small><b>Volgende uitdaging</b>{selected.next}</small></p></div>}</section>;
+  return <section className="assessment-rubric"><header><p>{criterion.domainLabel || 'Waar sta je nu?'}</p><h2>{criterion.title}</h2><span>{criterion.short}</span></header><div className="level-grid">{LEVELS.map((level) => <button key={level.key} className={value === level.key ? 'level-option selected' : 'level-option'} style={{ '--level-color': level.color }} onClick={() => onChange(level.key)}><span className="level-name">{level.name}</span><span className="level-summary">{criterion.levels[level.key].summary}</span>{value === level.key && <Check size={17} />}</button>)}</div></section>;
 }
 
 export function SessionScreen({ rubric, classItem, series, mode, onSubmit, onExit }) {
