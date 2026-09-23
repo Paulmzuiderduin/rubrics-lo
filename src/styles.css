@@ -402,6 +402,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue) !important
 .sidebar-account { display: grid; gap: 8px; margin-top: auto; padding: 14px 10px 0; border-top: 1px solid #2c475e; }
 .sidebar-account small { overflow: hidden; color: #a9bac7; text-overflow: ellipsis; white-space: nowrap; }
 .sidebar-account button { display: inline-flex; align-items: center; gap: 7px; width: fit-content; padding: 4px 0; border: 0; background: transparent; color: #d2dce4; font-size: 12px; }
+.mobile-logout { display: none; }
+@media (max-width: 900px) {
+  .sidebar-account { display: none; }
+  .mobile-logout { display: flex; }
+}
+@media (max-width: 700px) {
+  .app-shell { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .sidebar { height: calc(64px + env(safe-area-inset-bottom)); padding-bottom: calc(7px + env(safe-area-inset-bottom)); }
+  .sidebar nav { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
 .cloud-state { display: flex; align-items: center; gap: 6px; color: #a9d7bf; font-size: 12px; font-weight: 700; }
 .cloud-state.error { color: #f0b0b0; }
 .auth-page, .workspace-gate { min-height: 100vh; display: grid; place-items: center; padding: 32px 18px; background: #edf2f5; color: var(--navy); }

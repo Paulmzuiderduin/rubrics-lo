@@ -32,6 +32,14 @@ test('resultaten vragen eerst om een klaskeuze', () => {
   assert.match(appSource, /setSelectedClassId\(classItem\.id\)/);
 });
 
+test('accountbediening blijft bereikbaar op smalle schermen', () => {
+  assert.match(appSource, /className="nav-item mobile-logout" onClick=\{onSignOut\}/);
+  assert.match(appSource, /aria-label="Uitloggen"/);
+  assert.match(stylesSource, /@media \(max-width: 900px\)[\s\S]*?\.sidebar-account \{ display: none; \}[\s\S]*?\.mobile-logout \{ display: flex; \}/);
+  assert.match(stylesSource, /\.sidebar nav\s*\{\s*grid-template-columns:\s*repeat\(6, minmax\(0, 1fr\)\)/s);
+  assert.match(stylesSource, /env\(safe-area-inset-bottom\)/);
+});
+
 test('docent kan de zelfbeoordeling apart bekijken en de effectieve beoordeling aanpassen', () => {
   assert.match(appSource, /function ReviewModal\s*\(/);
   assert.match(appSource, /De leerlingbeoordeling is leidend/);
