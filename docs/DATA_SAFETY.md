@@ -35,7 +35,7 @@ The Supabase project is on the Free plan and the dashboard currently shows no ma
 
 Because pupil data is already present, treat this as an immediate operational gap to resolve before expanding use or relying on the app as the only copy:
 
-1. In Supabase Dashboard, open **Database → Backups** and confirm the plan, most recent successful backup, and available retention window for this specific project.
+1. Verified in Supabase Dashboard → **Database → Backups**: the organization is on Free, with no managed backup entries; Supabase says Free Plan does not include project backups. There is no “last backup” timestamp to rely on.
 2. If the project is on a plan without managed daily backups, establish a scheduled encrypted logical export to a separate protected location; do not treat GitHub or a developer laptop as the sole backup.
 3. Restore a backup into a separate test project and verify classes, assessments, rubric versions, access policies, and auth behavior. Never rehearse restoration over the live pilot project.
 4. Write down the recovery owner, access path, restore steps, expected data-loss window, and a date for the next restore drill.
@@ -45,14 +45,28 @@ Supabase documents daily backups for Pro, Team, and Enterprise projects (with pl
 
 ## Retention proposal — school/controller decision required
 
-There is no one-size-fits-all legal retention duration for these assessment records. The school is normally best placed to determine the purpose and required duration; confirm it with the school's privacy officer/data protection officer before production use. The [Dutch Data Protection Authority's guidance](https://autoriteitpersoonsgegevens.nl/nl/over-privacy/persoonsgegevens/bewaren-van-persoonsgegevens) says organizations must set a purpose-based period, disclose it, and delete or anonymize data when it is no longer needed.
+There is no one-size-fits-all legal retention duration for these assessment records. The school is normally best placed to determine the purpose and required duration; confirm it with the school's privacy officer/data protection officer before further or broader use, and as soon as possible for the current pilot. The [Dutch Data Protection Authority's guidance](https://autoriteitpersoonsgegevens.nl/nl/over-privacy/persoonsgegevens/bewaren-van-persoonsgegevens) says organizations must set a purpose-based period, disclose it, and delete or anonymize data when it is no longer needed.
 
-The app is currently being used with pupil data, so treat class rosters and assessments as personal data. The following is a concrete proposal for the school/controller to review; it is not a legal determination and must not be represented as school policy until approved:
+The app is currently being used with pupil data, so treat class rosters and assessments as personal data. This decision worksheet is a proposal for the school/controller to complete; it is not a legal determination and must not be represented as school policy until approved.
 
-- **Pupil roster, rubric assessments, teacher adjustments, and lesson links:** retain during the school year only while needed for teaching feedback. At class/year rollover, transfer only school-approved information to the authoritative school system; proposal: purge identifiable app records no later than 90 days after the school year ends. Do not keep multi-year identifiable history by default; require a documented teaching purpose and school approval if it is needed.
-- **Teacher account and workspace:** retain while the teacher is authorized to use the pilot. On role departure, pilot closure, or a verified deletion request, export only if the school requires it and then delete the account/workspace. The database has cascading foreign keys from account to workspace and its classes, but the app has no account-deletion flow yet.
-- **Exports:** treat CSV, PDF, and JSON files as separate personal-data copies. Keep them only in a school-approved location and delete them by the same approved end date; personal Downloads or consumer cloud drives are not an approved archive by default.
-- **Security/operational logs:** retain only the minimum necessary to investigate access and reliability issues; do not log pupil names, rubric responses, access tokens, or full request payloads.
-- **Backups:** Supabase Free does not include automatic database backups. If a school-approved encrypted off-site export is established, a proposed rolling 30-day expiry gives a finite window for copies of deleted rows to expire; a live-row deletion does not instantly erase older backup copies. Test restore only in a separate project. No backup destination or restore drill is currently configured.
+| Data/copy | Proposed rule to review | Trigger and deletion action |
+| --- | --- | --- |
+| Pupil roster, rubric assessments (including self-assessment and any teacher adjustment), and linked lesson records | Keep only while needed for teaching feedback in the active school year. Do not retain identifiable multi-year history by default. | At year-end, transfer only information the school approves to its authoritative system (for example, Magister). Proposed outer limit: delete identifiable app records within 90 days after the school year ends. If a class ends earlier and the purpose is over, delete sooner. |
+| Teacher account and workspace | Keep while the teacher remains authorized to use the pilot. | On role departure, pilot closure, or a verified deletion request, follow the school-approved export decision, then delete the account/workspace. There is no self-serve account-deletion flow yet; cascade behavior has not been tested as a user-facing deletion process. |
+| CSV/PDF/JSON exports and printed reports | Treat each as a separate personal-data copy; save only to a school-approved location. | Give each copy an owner and deletion date no later than the approved live-record deadline. Remove copies from Downloads, cloud recycle bins, and print piles as well as the primary folder. |
+| Operational logs | Minimum necessary to investigate access and reliability; never pupil names, rubric responses, access tokens, or full request payloads. | Set the period with the school and verify provider log retention separately; avoid adding identifiers to logs. |
+| Recovery backups | No managed backups exist on this project's current Supabase Free plan. | Choose one path: (a) Supabase Pro daily backups, documented with a 7-day window, and account for that residual-copy period; or (b) a school-approved encrypted off-site export with a proposed rolling 30-day expiry. A live-row deletion does not erase existing backups. Restore-test only in a separate project. |
 
-The app does not yet automate retention or account-wide deletion. The proposed 90-day post-school-year purge and 30-day backup expiry are not implemented and remain subject to school/controller approval. Before treating either as policy, record the purpose, legal basis, accountable owner, exact calendar trigger, exceptions, deletion method, and how the schedule is disclosed. The school should also decide whether the school's official system (for example, Magister) remains the authoritative long-term record and this app holds only the current teaching-period copy.
+**Approval record to complete with the school/controller:**
+
+- Accountable school/controller and approving privacy/ICT contact: ____________________
+- Purpose and legal basis for using this pilot: ____________________
+- Is this app a temporary teaching workspace, with Magister/another system as the authoritative record? ____________________
+- Are named pupil assessments needed across school years? If yes, why and for how long? ____________________
+- Approved live-record deletion trigger/date: ____________________
+- Approved export destination, owner, and deletion date: ____________________
+- Chosen backup path, recovery owner, backup expiry, and restore-drill date: ____________________
+- Account/role departure and deletion procedure: ____________________
+- Approval date and date for review: ____________________
+
+The app does not yet automate retention or account-wide deletion. The suggested 90-day live-record outer limit and 30-day export-backup expiry are not implemented and remain subject to school/controller approval. Supabase Pro's managed backup window is separate (7 days); do not describe either schedule as active until the chosen plan, actual expiry behavior, deletion method, and disclosure have been verified. The school must decide whether it needs multi-year progress and which system remains authoritative.
