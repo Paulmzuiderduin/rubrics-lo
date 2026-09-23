@@ -137,3 +137,10 @@ test('gewijzigde werkruimte-opslag gebruikt compare-and-swap en behoudt de rollb
   assert.match(sql, /grant execute on function public\.apply_personal_workspace_changes\(jsonb, timestamptz\)[\s\S]*to authenticated/i);
   assert.doesNotMatch(sql, /drop function public\.save_personal_workspace_snapshot/i);
 });
+
+test('legacy volledige snapshot writer wordt na live client cutover geblokkeerd', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260923172946_retire_legacy_workspace_writer.sql', import.meta.url), 'utf8');
+  assert.match(sql, /revoke all on function public\.save_personal_workspace_snapshot\(jsonb\)[\s\S]*from public, anon, authenticated/i);
+  assert.match(sql, /retired legacy writer/i);
+  assert.doesNotMatch(sql, /drop function/i);
+});
