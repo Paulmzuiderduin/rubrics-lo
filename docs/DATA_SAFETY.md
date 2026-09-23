@@ -6,14 +6,14 @@ The app can technically store pupil names and formative assessments, but a teach
 
 Use two separate, verified email accounts that you control, each in a separate browser profile (or one normal window and one private window). Do not use actual pupil names or results during this check.
 
-1. Sign in as Account A. Create a class named `TEST-ISOLATION-A`, add fictional names, and save one test assessment. Wait until the app says it is saved.
-2. Open a second browser profile and sign in as Account B. Its class list and results must be empty; `TEST-ISOLATION-A` and its fictional records must not appear.
-3. In Account B, create a different class named `TEST-ISOLATION-B`. Return to Account A and refresh: Account A must still only see its own class.
-4. In both profiles, open Results, Reports, the lesson agenda, and the rubric library. Confirm that account B never sees account A's class, student names, assessment, or report.
+1. Do not edit or delete any existing class. Sign in as Account A and create a disposable class named `TEST-ISOLATION-A`, add invented names, and save one test assessment. Wait until the app says it is saved.
+2. Open a second browser profile and sign in as Account B. It may already have its own data; confirm specifically that `TEST-ISOLATION-A` and its invented records do not appear.
+3. In Account B, create a different disposable class named `TEST-ISOLATION-B`. Return to Account A and refresh: `TEST-ISOLATION-B` must not appear.
+4. In both profiles, check Classes, Results, Reports, and the lesson agenda for cross-account leakage. The rubric library is global and is expected to be the same for both accounts.
 5. With Account A open in two tabs, save a change in Tab 1. Then try to save a different change from the older Tab 2. Tab 2 must show a save conflict and keep its edits available for download; it must not replace Tab 1's newer data. A save request that times out has an uncertain result, so reload the saved version before retrying.
-6. In Account A, use the delete/undo action on a fictional assessment and class. Confirm the item can be restored during the 10-second undo window; after that window, it is intentionally deleted.
+6. Use the delete/undo action only on a synthetic assessment and disposable test class. Confirm the item can be restored during the 10-second undo window; after that window, it is intentionally deleted.
 7. Sign out of both accounts. Attempt to load the app without a session: the private workspace and all pupil data must remain inaccessible.
-8. Remove all `TEST-ISOLATION-*` data after the check. Do not proceed with real pupil data if any step fails.
+8. Remove only the `TEST-ISOLATION-*` data after the check. If a check fails, stop expanding use of the app, preserve existing records, and contact the school's privacy/IT lead; do not use the real class to troubleshoot or delete data.
 
 Keep screenshots or notes of the expected/actual results, but redact names, email addresses, tokens, and other secrets.
 
@@ -33,7 +33,7 @@ The Supabase project is on the Free plan and the dashboard currently shows no ma
 
 ## Backups and recovery
 
-Before real pupil data is allowed:
+Because pupil data is already present, treat this as an immediate operational gap to resolve before expanding use or relying on the app as the only copy:
 
 1. In Supabase Dashboard, open **Database → Backups** and confirm the plan, most recent successful backup, and available retention window for this specific project.
 2. If the project is on a plan without managed daily backups, establish a scheduled encrypted logical export to a separate protected location; do not treat GitHub or a developer laptop as the sole backup.

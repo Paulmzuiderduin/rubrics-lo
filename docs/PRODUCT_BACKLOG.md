@@ -11,8 +11,8 @@ Priorities reflect the pilot's most important risks and workflows. Keep this fil
 - [x] Add a short undo window after deleting a class or assessment.
 - [x] Apply the compare-and-swap migration and verify live function grants; repeat the same-account stale-tab UX check after the timeout safeguard deploy.
 - [ ] Complete the two-account isolation and stale-tab UX check with fictional test data; the user reports cross-account isolation and no stale overwrite, but the stale tab previously stayed in “Saving…”.
-- [ ] Confirm the Supabase backup plan, latest backup timestamp, and restore procedure; perform a restore drill in a separate project before real pupil data is allowed.
-- [ ] Agree and publish retention/deletion periods with the school/controller before storing real pupil data.
+- [ ] Confirm the Supabase backup plan, latest backup timestamp, and restore procedure; establish a protected recovery path and perform a restore drill in a separate project before expanding real-data use.
+- [ ] Agree and publish retention/deletion periods with the school/controller for the pupil data currently stored and before expanding its use.
 - [ ] Decide how account deletion, class deletion, exports, and backup expiry interact with the agreed retention rules.
 
 ## P1 — data safety and operations
