@@ -1,6 +1,6 @@
 # Data safety: pilot checklist and decisions
 
-This pilot should use fictional pupil data until the school has approved the privacy and retention arrangements. A teacher account is not a substitute for school authorization to process pupil data.
+The app can technically store pupil names and formative assessments, but a teacher account is not a substitute for the school's authorization and privacy arrangements. Use synthetic records for access-control tests; do not use a live class for destructive tests.
 
 ## Verify access isolation with real test accounts
 
@@ -43,17 +43,16 @@ Before real pupil data is allowed:
 
 Supabase documents daily backups for Pro, Team, and Enterprise projects (with plan-specific retention), while Free projects should maintain their own exports. Verify the current project plan rather than assuming which protection applies. See [Supabase's backup documentation](https://supabase.com/docs/guides/platform/backups).
 
-## Retention proposal — decision required
+## Retention proposal — school/controller decision required
 
 There is no one-size-fits-all legal retention duration for these assessment records. The school is normally best placed to determine the purpose and required duration; confirm it with the school's privacy officer/data protection officer before production use. The [Dutch Data Protection Authority's guidance](https://autoriteitpersoonsgegevens.nl/nl/over-privacy/persoonsgegevens/bewaren-van-persoonsgegevens) says organizations must set a purpose-based period, disclose it, and delete or anonymize data when it is no longer needed.
 
-Suggested starting point for discussion (not a legal determination):
+The app is currently being used with pupil data, so treat class rosters and assessments as personal data. The following is a concrete proposal for the school/controller to review; it is not a legal determination and must not be represented as school policy until approved:
 
-- **Pilot with fictional data:** delete test classes and assessments at the end of the pilot; retain no identifiable test records beyond 30 days after pilot close.
-- **Real pupil records:** before entry, have the school/controller approve a purpose and exact schedule. A reasonable proposal to take to that discussion is: retain the current school-year roster and assessment history while needed for teaching feedback; at year-end, export only what the school needs, delete the class roster and unnecessary history within 90 days, and retain longer only when the school documents a specific reporting/continuity need. Do not enable real pupil data based on this proposal alone.
-- **Teacher account and class roster:** remove or export on account closure, role departure, or class-year rollover according to the school's decision. Do not leave former pupils indefinitely in an account by default.
+- **Pupil roster, rubric assessments, teacher adjustments, and lesson links:** retain during the school year only while needed for teaching feedback. At class/year rollover, transfer only school-approved information to the authoritative school system; proposal: purge identifiable app records no later than 90 days after the school year ends. Do not keep multi-year identifiable history by default; require a documented teaching purpose and school approval if it is needed.
+- **Teacher account and workspace:** retain while the teacher is authorized to use the pilot. On role departure, pilot closure, or a verified deletion request, export only if the school requires it and then delete the account/workspace. The database has cascading foreign keys from account to workspace and its classes, but the app has no account-deletion flow yet.
+- **Exports:** treat CSV, PDF, and JSON files as separate personal-data copies. Keep them only in a school-approved location and delete them by the same approved end date; personal Downloads or consumer cloud drives are not an approved archive by default.
 - **Security/operational logs:** retain only the minimum necessary to investigate access and reliability issues; do not log pupil names, rubric responses, access tokens, or full request payloads.
-- **Backups:** document how long deleted records can remain in backups and how expiry works. A live-row deletion does not instantly erase older backup copies.
-- **Exports:** treat downloaded CSV/PDF/JSON files as copies of personal data; assign an owner and deletion date, and store them only in approved locations.
+- **Backups:** Supabase Free does not include automatic database backups. If a school-approved encrypted off-site export is established, a proposed rolling 30-day expiry gives a finite window for copies of deleted rows to expire; a live-row deletion does not instantly erase older backup copies. Test restore only in a separate project. No backup destination or restore drill is currently configured.
 
-The app does not yet automate retention or account-wide deletion. Do not describe a retention period as implemented until scheduled deletion, backup expiry, export handling, and account closure behavior are all verified. For the present Free-plan pilot, the first retention decision is to use fictional data only and manually purge test records at pilot close (within 30 days); a real-data schedule remains for the school/controller to approve.
+The app does not yet automate retention or account-wide deletion. The proposed 90-day post-school-year purge and 30-day backup expiry are not implemented and remain subject to school/controller approval. Before treating either as policy, record the purpose, legal basis, accountable owner, exact calendar trigger, exceptions, deletion method, and how the schedule is disclosed. The school should also decide whether the school's official system (for example, Magister) remains the authoritative long-term record and this app holds only the current teaching-period copy.
