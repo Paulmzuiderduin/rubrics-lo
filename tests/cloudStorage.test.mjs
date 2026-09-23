@@ -20,6 +20,7 @@ test('cloudopslag leest de werkomgeving via een servergebonden RPC', async () =>
 test('cloudopslag verstuurt alleen wijzigingen en de verwachte revisie', async () => {
   let rpcCall;
   const chain = {
+    abortSignal(signal) { assert.ok(signal instanceof AbortSignal); return this; },
     async single() { return { data: { updated_at: '2026-09-18T10:00:00Z' }, error: null }; },
   };
   const client = { rpc(name, args) { rpcCall = { name, args }; return chain; } };
@@ -27,4 +28,15 @@ test('cloudopslag verstuurt alleen wijzigingen en de verwachte revisie', async (
   await saveRemoteWorkspace(client, changes, '2026-09-18T10:00:00Z');
   assert.equal(rpcCall.name, APPLY_WORKSPACE_CHANGES_RPC);
   assert.deepEqual(rpcCall.args, { changes, expected_updated_at: '2026-09-18T10:00:00Z' });
+});
+
+test('vastgelopen cloudopslag wordt afgebroken en als onzekere uitkomst gemeld', async () => {
+  const chain = {
+    abortSignal(signal) {
+      return { single: () => new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(new Error('Aborted')), { once: true })) };
+    },
+  };
+  const client = { rpc() { return chain; } };
+
+  await assert.rejects(saveRemoteWorkspace(client, {}, null, 5), { code: 'SAVE_TIMEOUT' });
 });

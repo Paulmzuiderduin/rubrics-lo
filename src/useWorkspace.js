@@ -75,7 +75,8 @@ export function useWorkspace(user) {
       if (saved && saveVersion.current === version) setState((previous) => ({ ...previous, sync: 'saved', updatedAt: saved.updated_at, error: '' }));
     }).catch((error) => {
       saveBlocked.current = true;
-      setState((previous) => ({ ...previous, sync: 'error', error: error.code === '40001' ? 'Een andere sessie heeft ondertussen wijzigingen opgeslagen. Je wijzigingen zijn nog in dit venster beschikbaar; download ze voordat je de nieuwste versie opnieuw laadt.' : 'Opslaan is mislukt. Je wijzigingen zijn nog in dit venster beschikbaar. Controleer de verbinding en probeer opnieuw.', conflict: error.code === '40001' }));
+      const timedOut = error.code === 'SAVE_TIMEOUT';
+      setState((previous) => ({ ...previous, sync: 'error', error: error.code === '40001' ? 'Een andere sessie heeft ondertussen wijzigingen opgeslagen. Je wijzigingen zijn nog in dit venster beschikbaar; download ze voordat je de nieuwste versie opnieuw laadt.' : timedOut ? 'Opslaan duurde te lang. De wijziging kan alsnog zijn verwerkt. Laad eerst de opgeslagen versie opnieuw om te controleren.' : 'Opslaan is mislukt. Je wijzigingen zijn nog in dit venster beschikbaar. Controleer de verbinding en probeer opnieuw.', conflict: error.code === '40001' || timedOut }));
     });
   }, [user.id]);
 
@@ -97,7 +98,8 @@ export function useWorkspace(user) {
       if (saveVersion.current === version) setState((previous) => ({ ...previous, sync: 'saved', updatedAt: saved.updated_at, error: '', conflict: false }));
     }).catch((error) => {
       saveBlocked.current = true;
-      setState((previous) => ({ ...previous, sync: 'error', error: error.code === '40001' ? 'De opgeslagen versie is nieuwer. Download de wijzigingen uit dit venster voordat je de nieuwste versie opnieuw laadt.' : 'Opslaan is opnieuw mislukt. Je wijzigingen zijn nog in dit venster beschikbaar.', conflict: error.code === '40001' }));
+      const timedOut = error.code === 'SAVE_TIMEOUT';
+      setState((previous) => ({ ...previous, sync: 'error', error: error.code === '40001' ? 'De opgeslagen versie is nieuwer. Download de wijzigingen uit dit venster voordat je de nieuwste versie opnieuw laadt.' : timedOut ? 'Opslaan duurde te lang. De wijziging kan alsnog zijn verwerkt. Laad eerst de opgeslagen versie opnieuw om te controleren.' : 'Opslaan is opnieuw mislukt. Je wijzigingen zijn nog in dit venster beschikbaar.', conflict: error.code === '40001' || timedOut }));
     });
   }, [user.id]);
 

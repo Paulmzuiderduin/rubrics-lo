@@ -51,12 +51,23 @@ export function diffWorkspace(before = {}, after = {}) {
   const currentOccurrenceUpserts = seriesOccurrences(seriesAfter)
     .filter((item) => affectedSeries.has(item.seriesId));
   const assessmentChanges = collectionChanges(before.assessments, after.assessments, (item) => item.id);
+  const studentChanges = collectionChanges(
+    classStudents(classesBefore),
+    classStudents(classesAfter),
+    (item) => JSON.stringify([item.classId, item.id]),
+  );
 
   return {
     settings: same(before.settings, after.settings) ? null : after.settings,
     lessonPeriods: collectionChanges(before.lessonPeriods, after.lessonPeriods, (item) => item.number),
     classes: collectionChanges(classesBefore, classesAfter, (item) => item.id, (item) => without(item, 'students')),
-    students: collectionChanges(classStudents(classesBefore), classStudents(classesAfter), (item) => JSON.stringify([item.classId, item.id])),
+    students: {
+      ...studentChanges,
+      delete: studentChanges.delete.map((key) => {
+        const [classId, id] = JSON.parse(key);
+        return { class_id: classId, id };
+      }),
+    },
     gymScheduleSlots: collectionChanges(before.gymScheduleSlots, after.gymScheduleSlots, (item) => item.id),
     lessonSeries: collectionChanges(seriesBefore, seriesAfter, (item) => item.id, (item) => without(item, 'occurrences')),
     lessonOccurrences: {

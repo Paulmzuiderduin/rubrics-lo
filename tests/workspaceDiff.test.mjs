@@ -52,7 +52,7 @@ test('het verwijderen van een klas bevat ook de gekoppelde leerlingen en beoorde
   const changes = diffWorkspace(before, after);
 
   assert.deepEqual(changes.classes.delete, ['class-a']);
-  assert.deepEqual(changes.students.delete, [JSON.stringify(['class-a', 'student-a'])]);
+  assert.deepEqual(changes.students.delete, [{ class_id: 'class-a', id: 'student-a' }]);
   assert.deepEqual(changes.assessments.delete, ['assessment-a']);
   assert.deepEqual(changes.lessonSeries.delete, ['series-a']);
   assert.deepEqual(changes.lessonOccurrences.delete, [{ seriesId: 'series-a', key: 'occ-a' }]);
