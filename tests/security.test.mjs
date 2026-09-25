@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import { RUBRICS } from '../src/data.js';
 
 function escapeRegExp(value) {
@@ -29,6 +30,32 @@ test('frontendconfiguratie accepteert alleen een publishable key', async () => {
   const client = await readFile(new URL('../src/supabase.js', import.meta.url), 'utf8');
   assert.match(client, /VITE_SUPABASE_PUBLISHABLE_KEY/);
   assert.doesNotMatch(client, /service_role|sb_secret_|VITE_SUPABASE_ANON_KEY/);
+});
+
+test('git negeert lokale pupilbestanden en niet-opgeslagen werkruimte-exporten', () => {
+  const privateFiles = [
+    'klaslijst.csv',
+    'rooster.xlsx',
+    'rubrics-lo-unsaved-2026-09-25.json',
+    'exports/rapport.pdf',
+    'private-data/werkruimte.json',
+    'tests/fixtures/demo.csv',
+  ];
+  const ignored = spawnSync('git', ['check-ignore', '--no-index', '--stdin'], {
+    input: `${privateFiles.join('\n')}\n`,
+    encoding: 'utf8',
+  });
+
+  assert.equal(ignored.status, 0, ignored.stderr);
+  assert.deepEqual(ignored.stdout.trim().split('\n'), privateFiles);
+
+  const tracked = spawnSync('git', ['ls-files', '-z'], {
+    encoding: 'utf8',
+  });
+  assert.equal(tracked.status, 0, tracked.stderr);
+  const trackedPrivateFiles = tracked.stdout.split('\0').filter((path) =>
+    /(^|\/)(exports|classlists|private-data)\/|(^|\/)(rubrics-lo-unsaved-[^/]+\.json|[^/]+\.(csv|xls|xlsx|sqlite|sqlite3|db))$/i.test(path));
+  assert.deepEqual(trackedPrivateFiles, []);
 });
 
 test('authmails gebruiken de eigen Rubrics LO-afzender en Nederlandse templates', async () => {

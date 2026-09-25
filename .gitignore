@@ -4,3 +4,15 @@ dist
 .env
 .env.*
 !.env.example
+
+# Local class-list imports/exports and pupil data must not enter version control.
+*.csv
+*.xls
+*.xlsx
+*.sqlite
+*.sqlite3
+*.db
+rubrics-lo-unsaved-*.json
+**/exports/
+**/classlists/
+**/private-data/
